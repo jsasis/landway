@@ -1,0 +1,38 @@
+/*************
+Default Theme
+*************/
+/* overall */
+
+.tablesorter-default .header,
+.tablesorter-default .tablesorter-header {
+	background-image: url('../img/bootstrap-black-unsorted.png');
+	background-position: center right;
+	background-repeat: no-repeat;
+	cursor: pointer;
+	white-space: normal;
+	padding: 4px 20px 4px 7px;
+	vertical-align: middle;
+}
+.tablesorter-header-inner{
+	margin-right: -5px;
+}
+.tablesorter-default thead .headerSortUp:after,
+.tablesorter-default thead .tablesorter-headerSortUp,
+.tablesorter-default thead .tablesorter-headerAsc {
+	background-image: url('../img/metro-black-asc.png');
+	border-bottom: #000 2px solid;
+	vertical-align: middle;
+}
+.tablesorter-default thead .headerSortDown,
+.tablesorter-default thead .tablesorter-headerSortDown,
+.tablesorter-default thead .tablesorter-headerDesc {
+	background-image: url('../img/metro-black-desc.png');
+	border-bottom: #000 2px solid;
+}
+.tablesorter-default thead .sorter-false {
+	background-image: none;
+	cursor: default;
+	padding: 8px;
+	vertical-align: middle;
+}
+

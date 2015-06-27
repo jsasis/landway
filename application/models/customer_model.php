@@ -1,0 +1,102 @@
+<?php 
+	if(!defined('BASEPATH')) exit('No direct script access allowed');
+	
+	class Customer_Model extends CI_Model {
+		private $table = 'customer';
+		function __construct(){
+			parent::__construct();
+		}
+
+		function create($data){
+			if(isset($data['customer_id'])){
+				$this->db->where('customer_id',$data['customer_id']);
+				if($this->db->update($this->table,$data)){
+					return true;
+				}else{
+					return false;
+				}
+			}else{
+				if($this->db->insert($this->table,$data)){
+					return true;
+				}else{
+					return false;
+				}
+			}
+		}
+
+		function read($customerID = null){
+			if($customerID == null){
+				$this->db->order_by('customer_id','desc');
+				$query = $this->db->get($this->table);
+				return $query->result();
+			}else{
+				$this->db->where('customer_id',$customerID);
+				$query = $this->db->get($this->table);
+				return $query->row_array();
+			}
+		}
+
+		function delete($data){
+			for($i=0; $i<sizeof($data); $i++){
+				$this->db->where('customer_id',$data[$i]);
+				$this->db->delete($this->table);
+			}
+			return true;
+		}
+
+		function fetch($query_array, $limit, $start){
+
+			if(strlen($query_array['name'])){
+				$this->db->like('name', $query_array['name']);
+				$this->db->or_like('complete_address', $query_array['name']);
+			}
+
+			$query = $this->db->get($this->table, $limit, $start);
+
+			$ret['rows']= $query->result();
+
+			if(strlen($query_array['name'])){
+				$this->db->like('name', $query_array['name']);
+				$this->db->or_like('complete_address', $query_array['name']);
+			}
+
+			$ret['num_rows'] = $this->db->count_all_results($this->table);
+
+			return $ret;
+		}
+
+		function getCustomers($customer_type){ //feed typeahead with customer data
+			$this->db->where('customer_type', $customer_type);
+			$query = $this->db->get($this->table);
+			
+			return $query->result();
+		}
+
+		function searchCustomer($data){ //get customer_id. used to set hidden field value after typeahead
+			$this->db->select('customer_id,complete_address');
+			$this->db->where('name',$data);
+
+			$query = $this->db->get($this->table);
+			if($query->num_rows() > 0){
+				return $query->row_array();
+			}
+		}
+
+		/*function recordCount(){
+
+			return $this->db->count_all($this->table);
+		}
+
+		function fetchUnit($limit, $start){
+			$sql = 'SELECT * FROM customer ORDER BY customer_id DESC LIMIT ?,?';
+
+			$query = $this->db->query($sql,array(intval($limit),intval($start)));
+
+			if ($query->num_rows > 0) {
+				return $query->result();
+			}
+		}*/
+
+		
+	}
+?>
