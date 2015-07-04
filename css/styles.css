@@ -22,7 +22,6 @@
   body {
     padding: 0;
     margin: 0;
-    background: red;
   }
 	h1 {
 		font-size: 26px;
@@ -182,3 +181,7 @@ body.login {
   margin-top: 9px;
 }
 
+.meta {
+  line-height: 7px;
+  padding-bottom: 1px;
+}
