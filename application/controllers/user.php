@@ -2,7 +2,7 @@
     exit('No direct script access allowed');
 }
 
-class User extends CI_Controller
+class User extends MY_Controller
 {
 
     public function __construct()
@@ -20,39 +20,7 @@ class User extends CI_Controller
 
     public function show($query_id = 0)
     {
-        $this->input->load_query($query_id);
-
-        $query_array = array(
-            'key' => $this->input->get('key'),
-        );
-
-        $config                = array();
-        $config['base_url']    = base_url() . "user/show/$query_id";
-        $config['per_page']    = 30;
-        $config['uri_segment'] = 4;
-        $page                  = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
-
-        $result               = $this->user_model->fetch($query_array, $config['per_page'], $page);
-        $config['total_rows'] = $result['num_rows'];
-
-        $this->pagination->initialize($config);
-
-        $data['links']  = $this->pagination->create_links();
-        $data['result'] = $result['rows'];
-
-        $total_rows = $this->pagination->total_rows;
-
-        ($total_rows < 1) ? $start = 0 : $start = $page + 1;
-
-        $end = $page + $this->pagination->per_page;
-
-        if ($end > $total_rows) {
-            $end = $total_rows;
-        }
-
-        $data['start'] = $start;
-        $data['end']   = $end;
-        $data['total'] = $total_rows;
+        $data = $this->paginate($this->user_model, base_url("user/show/$query_id"), $this->config->item('per_page_limit'), $query_id);
 
         return $this->load->view('user/user', $data);
     }
@@ -60,7 +28,7 @@ class User extends CI_Controller
     public function search()
     {
         $query_array = array(
-            'key' => $this->input->post('key'),
+            'search_key' => $this->input->post('search_key'),
         );
 
         $query_id = $this->input->save_query($query_array);
@@ -223,5 +191,5 @@ class User extends CI_Controller
             return $this->load->view('waybill/waybill_details', $data);
         }
     }
-    
+
 }

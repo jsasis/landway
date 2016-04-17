@@ -20,7 +20,7 @@
 									</div>
 									<form action='<?php echo base_url();?>customer/searchCustomer' method='POST' class="navbar-form pull-right" role="search">
 									   <div class="input-group">
-									   	<?php echo form_input(array('id'=>'name','name'=>'name','class'=>'form-control','placeholder'=>'Search Customer ...'));?>
+									   	<?php echo form_input(array('id'=>'name','name'=>'search_key','class'=>'form-control','placeholder'=>'Search Customer ...'));?>
 									   	<span class="input-group-btn"><button type='submit' class='btn btn-default' id='search'>Go</button></span>
 									   </div>
 									</form>

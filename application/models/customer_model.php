@@ -46,18 +46,18 @@
 
 		public function fetch($query_array, $limit, $start){
 
-			if(strlen($query_array['name'])){
-				$this->db->like('name', $query_array['name']);
-				$this->db->or_like('complete_address', $query_array['name']);
+			if(strlen($query_array['search_key'])){
+				$this->db->like('name', $query_array['search_key']);
+				$this->db->or_like('complete_address', $query_array['search_key']);
 			}
 
 			$query = $this->db->get($this->table, $limit, $start);
 
 			$ret['rows']= $query->result();
 
-			if(strlen($query_array['name'])){
-				$this->db->like('name', $query_array['name']);
-				$this->db->or_like('complete_address', $query_array['name']);
+			if(strlen($query_array['search_key'])){
+				$this->db->like('name', $query_array['search_key']);
+				$this->db->or_like('complete_address', $query_array['search_key']);
 			}
 
 			$ret['num_rows'] = $this->db->count_all_results($this->table);

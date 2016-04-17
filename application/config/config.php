@@ -16,6 +16,9 @@
 */
 $config['base_url']	= 'http://localhost/landway-cargo/';
 
+
+/* Pagination limit per page */
+$config['per_page_limit'] = 5;
 /*
 |--------------------------------------------------------------------------
 | Index File

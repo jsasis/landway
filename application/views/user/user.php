@@ -28,7 +28,7 @@
 										  <ul class='nav navbar-nav navbar-right'>
 										     <form action='<?php echo base_url();?>user/search' method='POST' class="navbar-form navbar-left" role="search">
 										        <div class="input-group">
-										        	<?php echo form_input(array('name'=>'key','class'=>'form-control','placeholder'=>'Search User ...'));?>
+										        	<?php echo form_input(array('name'=>'search_key','class'=>'form-control','placeholder'=>'Search User ...'));?>
 										        	<span class="input-group-btn"><button type='submit' class='btn btn-default' id='search'>Go</button></span>
 										        </div>
 										     </form>

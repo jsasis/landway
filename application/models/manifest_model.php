@@ -1,181 +1,195 @@
 <?php
-	class Manifest_model extends CI_Model {
-		private $table = 'manifest';
+class Manifest_model extends CI_Model
+{
+    private $table = 'manifest';
 
-		public function __construct() {
-			parent::__construct();
-			//date_default_timezone_set('Asia/Hong_Kong');
-		}
+    public function __construct()
+    {
+        parent::__construct();
+        //date_default_timezone_set('Asia/Hong_Kong');
+    }
 
-		public function create($data){
-			if(!isset($data['manifest_number'])){
-				$insert = $this->db->insert($this->table, $data['manifest_data']);	// add new manifest
-				$insert_id = $this->db->insert_id();
-				if($insert){
-					return $insert_id;
-				}else{
-					return FALSE;
-				}
-			}else{
-				$this->db->where('manifest_number', $data['manifest_number']);
-				$update = $this->db->update($this->table, $data['manifest_data']);
+    public function create($data)
+    {
+        if (!isset($data['manifest_number'])) {
+            $insert    = $this->db->insert($this->table, $data['manifest_data']); // add new manifest
+            $insert_id = $this->db->insert_id();
+            if ($insert) {
+                return $insert_id;
+            } else {
+                return false;
+            }
+        } else {
+            $this->db->where('manifest_number', $data['manifest_number']);
+            $update = $this->db->update($this->table, $data['manifest_data']);
 
-				if($update){
-					return TRUE;
-				}else{
-					return FALSE;
-				}
-			}
-		}
+            if ($update) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 
-		public function update($data){
-			foreach($data['waybills'] as $row){
-				$insert_waybills[] 			= array(
-					'manifest_number'	=> $data['manifest_number'],
-					'waybill_number' 	=> $row,
-					'delivery_status'	=> 'Undelivered',
-				);
+    public function update($data)
+    {
+        foreach ($data['waybills'] as $row) {
+            $insert_waybills[] = array(
+                'manifest_number' => $data['manifest_number'],
+                'waybill_number'  => $row,
+                'delivery_status' => 'Undelivered',
+            );
 
-				$update_waybills[] 		= array(
-					'status' 			=> 'Loaded',
-					'waybill_number'	=> $row		
-				);
-			}
+            $update_waybills[] = array(
+                'status'         => 'Loaded',
+                'waybill_number' => $row,
+            );
+        }
 
-			$this->db->trans_start();
+        $this->db->trans_start();
 
-				$this->db->insert_batch('manifest_waybill', $insert_waybills); // load waybills to manifest
-				$this->db->update_batch('waybill', $update_waybills, 'waybill_number'); //update waybill status
+        $this->db->insert_batch('manifest_waybill', $insert_waybills); // load waybills to manifest
+        $this->db->update_batch('waybill', $update_waybills, 'waybill_number'); //update waybill status
 
-			$this->db->trans_complete();
+        $this->db->trans_complete();
 
-			if($this->db->trans_status()){
-				
-				return TRUE;
+        if ($this->db->trans_status()) {
 
-			}else{
+            return true;
 
-				return FALSE;
-			}
-		}
+        } else {
 
-		public function unload($data){
-			$this->db->trans_start();
+            return false;
+        }
+    }
 
-			$this->db->where('waybill_number', $data);
-			$this->db->delete('manifest_waybill');
+    public function unload($data)
+    {
+        $this->db->trans_start();
 
-			$this->db->where('waybill_number', $data);
-			$this->db->update('waybill', array('status'=>'Received'));
+        $this->db->where('waybill_number', $data);
+        $this->db->delete('manifest_waybill');
 
-			$this->db->trans_complete();
+        $this->db->where('waybill_number', $data);
+        $this->db->update('waybill', array('status' => 'Received'));
 
-			if($this->db->trans_status()){
-				return TRUE;
-			}else{
-				return FALSE;
-			}
-		}
+        $this->db->trans_complete();
 
-		public function delete($manifest_number){
-			if($this->clearedToDelete($manifest_number)){
-				$this->db->where('manifest_number', $manifest_number);
-				$this->db->delete($this->table);
-				
-				return TRUE;
-			} else {
-				return FALSE;
-			}
-		}
+        if ($this->db->trans_status()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-		// public function delete($data){
-		// 	for($i=0; $i<sizeof($data); $i++){
-		// 		if($this->clearedToDelete($data[$i])){
-		// 			$this->db->where('manifest_number', $data[$i]);
-		// 			$this->db->delete($this->table);
-		// 		} else {
-		// 			return false;
-		// 		}
-		// 	}
-		// }
+    public function delete($manifest_number)
+    {
+        if ($this->clearedToDelete($manifest_number)) {
+            $this->db->where('manifest_number', $manifest_number);
+            $this->db->delete($this->table);
 
-		public function clearedToDelete($manifest_number){
-			$sql = "SELECT COUNT(*) as count FROM waybill
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // public function delete($data){
+    //     for($i=0; $i<sizeof($data); $i++){
+    //         if($this->clearedToDelete($data[$i])){
+    //             $this->db->where('manifest_number', $data[$i]);
+    //             $this->db->delete($this->table);
+    //         } else {
+    //             return false;
+    //         }
+    //     }
+    // }
+
+    public function clearedToDelete($manifest_number)
+    {
+        $sql = "SELECT COUNT(*) as count FROM waybill
 					JOIN manifest_waybill
 					ON manifest_waybill.waybill_number = waybill.waybill_number
 					WHERE manifest_waybill.manifest_number = ?
 					AND manifest_waybill.delivery_status = 'undelivered' ";
-			$query = $this->db->query($sql, array($manifest_number));
-			$result = $query->row();
+        $query  = $this->db->query($sql, array($manifest_number));
+        $result = $query->row();
 
-			if($result->count > 0 ) {
-				return FALSE;
-			} else {
-				return TRUE;
-			}
-		}
-		
-		public function fetch($query_array, $limit, $start, $truck_id = NULL) {
-			$this->db->select("CONCAT(day(date),month(date),'-', SUBSTRING_INDEX(t.plate_number, ' ', 1), manifest_number) AS alpha, manifest_number, t.plate_number, driver, trip_to, date", FALSE);
-			$this->db->join('truck t', 't.truck_id = manifest.truck_id');
-			$this->db->order_by('manifest_number DESC');
-			if($truck_id) $this->db->where('t.truck_id', $truck_id);
+        if ($result->count > 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
-			if(strlen($query_array['search_key'])){
-				$this->db->like('manifest_number', $query_array['search_key']);
-				$this->db->or_like('t.plate_number', $query_array['search_key']);
-				$this->db->or_like('trip_to', $query_array['search_key']);
-				$this->db->or_like('date', $query_array['search_key']);
-			}
-			
-			$query = $this->db->get('manifest', $limit, $start);
-			$ret['rows']	= $query->result();
-			
-			if(strlen($query_array['search_key'])){
-				$this->db->join('truck t', 't.truck_id = manifest.truck_id');
-				$this->db->like('manifest_number', $query_array['search_key']);
-				$this->db->or_like('t.plate_number', $query_array['search_key']);
-				$this->db->or_like('trip_to', $query_array['search_key']);
-				$this->db->or_like('date', $query_array['search_key']);
-			}
+    public function fetch($query_array, $limit, $start, $truck_id = null)
+    {
+        $this->db->select("CONCAT(day(date),month(date),'-', SUBSTRING_INDEX(t.plate_number, ' ', 1), manifest_number) AS alpha, manifest_number, t.plate_number, driver, trip_to, date", false);
+        $this->db->join('truck t', 't.truck_id = manifest.truck_id');
+        $this->db->order_by('manifest_number DESC');
+        if ($truck_id) {
+            $this->db->where('t.truck_id', $truck_id);
+        }
 
-			$this->db->select("CONCAT(day(date),month(date),'-', SUBSTRING_INDEX(t.plate_number, ' ', 1), manifest_number) AS alpha, manifest_number, t.plate_number, driver, trip_to, date", FALSE);
-			$this->db->join('truck tr', 'tr.truck_id = manifest.truck_id');
-			$this->db->order_by('manifest_number DESC');
-			if($truck_id) $this->db->where('tr.truck_id', $truck_id);
+        if (strlen($query_array['search_key'])) {
+            $this->db->like('manifest_number', $query_array['search_key']);
+            $this->db->or_like('t.plate_number', $query_array['search_key']);
+            $this->db->or_like('trip_to', $query_array['search_key']);
+            $this->db->or_like('date', $query_array['search_key']);
+        }
 
-			$ret['num_rows'] = $this->db->count_all_results($this->table);
-			
-			return $ret;
-		}
+        $query       = $this->db->get('manifest', $limit, $start);
+        $ret['rows'] = $query->result();
 
-		public function getManifest($manifest_number){
-			$sql = "SELECT CONCAT(day(date), month(date),'-',SUBSTRING_INDEX(t.plate_number, ' ', 1),manifest_number) AS alpha, manifest_number, t.truck_id as truck_id, t.plate_number, driver, trip_to, date
+        if (strlen($query_array['search_key'])) {
+            $this->db->join('truck t', 't.truck_id = manifest.truck_id');
+            $this->db->like('manifest_number', $query_array['search_key']);
+            $this->db->or_like('t.plate_number', $query_array['search_key']);
+            $this->db->or_like('trip_to', $query_array['search_key']);
+            $this->db->or_like('date', $query_array['search_key']);
+        }
+
+        $this->db->select("CONCAT(day(date),month(date),'-', SUBSTRING_INDEX(t.plate_number, ' ', 1), manifest_number) AS alpha, manifest_number, t.plate_number, driver, trip_to, date", false);
+        $this->db->join('truck tr', 'tr.truck_id = manifest.truck_id');
+        $this->db->order_by('manifest_number DESC');
+        if ($truck_id) {
+            $this->db->where('tr.truck_id', $truck_id);
+        }
+
+        $ret['num_rows'] = $this->db->count_all_results($this->table);
+
+        return $ret;
+    }
+
+    public function getManifest($manifest_number)
+    {
+        $sql = "SELECT CONCAT(day(date), month(date),'-',SUBSTRING_INDEX(t.plate_number, ' ', 1),manifest_number) AS alpha, manifest_number, t.truck_id as truck_id, t.plate_number, driver, trip_to, date
 					, CONCAT(ua.first_name,' ', ua.last_name) as processed_by
-					FROM manifest 
-					JOIN truck t ON t.truck_id = manifest.truck_id 
+					FROM manifest
+					JOIN truck t ON t.truck_id = manifest.truck_id
 					JOIN user_account ua ON ua.user_id = manifest.processed_by
 					WHERE manifest_number = ? ";
-					
-			$query = $this->db->query($sql, array($manifest_number));
 
-			if ($query->num_rows > 0) {
-				return $query->row_array();
-			}else{
-				return FALSE;
-			}
-		}
+        $query = $this->db->query($sql, array($manifest_number));
 
-		public function getManifestWaybills($manifest_number, $collections = NULL, $waybill_number = NULL, $loaded_view = NULL){
-			// STANDARD VIEW
-			if(!$collections && !$loaded_view) {
-				$sql = "SELECT IFNULL(w.waybill_number, 'TOTAL') AS waybill_number,c1.name as consignee,c2.name as consignor, w.prepaid, w.collect,
+        if ($query->num_rows > 0) {
+            return $query->row_array();
+        } else {
+            return false;
+        }
+    }
+
+    public function getManifestWaybills($manifest_number, $collections = null, $waybill_number = null, $loaded_view = null)
+    {
+        // STANDARD VIEW
+        if (!$collections && !$loaded_view) {
+            $sql = "SELECT IFNULL(w.waybill_number, 'TOTAL') AS waybill_number,c1.name as consignee,c2.name as consignor, w.prepaid, w.collect,
 				(
 					CASE WHEN c.cost_id IS NULL THEN GROUP_CONCAT(wi.quantity,wi.unit, ' ', wi.item_description) ELSE
 					 GROUP_CONCAT(wi.quantity,u.unit_code,' ', wi.item_description) END
 				 ) as remarks
 						FROM
-							( 
+							(
 						        SELECT w.waybill_number,
 						      	SUM(IF(w.payment_terms = 'prepaid', w.total, NULL)) as prepaid,
 						      	SUM(IF(w.payment_terms = 'collect', w.total, NULL)) as collect
@@ -194,13 +208,13 @@
 						LEFT JOIN unit u ON u.unit_id = uc.unit_id
 						GROUP BY waybill_number ";
 
-			// COLLECTIONS VIEW WITHOUT SEARCH
-			} elseif($collections && !$waybill_number && !$loaded_view) {
-				$sql = "SELECT IFNULL(mw.waybill_number, 'TOTAL') AS waybill_number, c1.name as consignee, c2.name as consignor,
+            // COLLECTIONS VIEW WITHOUT SEARCH
+        } elseif ($collections && !$waybill_number && !$loaded_view) {
+            $sql = "SELECT IFNULL(mw.waybill_number, 'TOTAL') AS waybill_number, c1.name as consignee, c2.name as consignor,
 									  mw.prepaid, mw.collect, mw.total_payment as total_payment,
 									  mw.total_due as total_due,(mw.total_due - mw.total_payment) as balance
 						FROM
-							( 
+							(
 						        SELECT mw.waybill_number, COALESCE(SUM(p.amount), 0) as total_payment, SUM(w.total) as total_due,
 						      	/*SUM(IF(p.payment_terms = 'prepaid', p.amount, 0)) as prepaid,
 						      	SUM(IF(p.payment_terms = 'collect', p.amount, 0)) as collect*/
@@ -218,12 +232,12 @@
                         ORDER BY mw.waybill_number DESC";
 
             // COLLECTIONS VIEW WITH SEARCH
-			} elseif($collections && $waybill_number  && !$loaded_view) { 
-				$sql = "SELECT IFNULL(mw.waybill_number, 'TOTAL') AS waybill_number, c1.name as consignee, c2.name as consignor,
+        } elseif ($collections && $waybill_number && !$loaded_view) {
+            $sql = "SELECT IFNULL(mw.waybill_number, 'TOTAL') AS waybill_number, c1.name as consignee, c2.name as consignor,
 									  mw.prepaid, mw.collect, mw.total_payment as total_payment,
 									  mw.total_due as total_due,(mw.total_due - mw.total_payment) as balance
 						FROM
-							( 
+							(
 						        SELECT mw.waybill_number, COALESCE(SUM(p.amount), 0) as total_payment, SUM(w.total) as total_due,
 						      	SUM(IF(p.payment_terms = 'prepaid', p.amount, 0)) as prepaid,
 						      	SUM(IF(p.payment_terms = 'collect', p.amount, 0)) as collect
@@ -238,36 +252,38 @@
 						LEFT JOIN customer c2 ON c2.customer_id = wb.consignor
                         ORDER BY mw.waybill_number DESC";
 
-			} else {
-				$sql = "SELECT w.waybill_number, c1.name as consignee,c2.name as consignor, delivery_status
+        } else {
+            $sql = "SELECT w.waybill_number, c1.name as consignee,c2.name as consignor, delivery_status
 						FROM waybill w
 						JOIN customer c1 ON c1.customer_id = w.consignee
 						JOIN customer c2 ON c2.customer_id = w.consignor
 						JOIN manifest_waybill mw ON mw.waybill_number = w.waybill_number
 						WHERE manifest_number = ?";
-			}
+        }
 
-			($waybill_number) ? $query = $this->db->query($sql, array($manifest_number, $waybill_number)) : $query = $this->db->query($sql, array($manifest_number));
+        ($waybill_number) ? $query = $this->db->query($sql, array($manifest_number, $waybill_number)) : $query = $this->db->query($sql, array($manifest_number));
 
-			return ($query) ?  $query->result() : FALSE;
-		}
+        return ($query) ? $query->result() : false;
+    }
 
-		public function getWaybillCollection($manifest_number = NULL){
-			$sql = "SELECT DISTINCT mw.waybill_number
+    public function getWaybillCollection($manifest_number = null)
+    {
+        $sql = "SELECT DISTINCT mw.waybill_number
 			      	FROM manifest_waybill mw
 			      	JOIN waybill w  ON w.waybill_number = mw.waybill_number
 			      	LEFT JOIN payment p ON p.waybill_number = w.waybill_number
 			        WHERE mw.manifest_number = ?";
 
-			$query = $this->db->query($sql, array($manifest_number));
+        $query = $this->db->query($sql, array($manifest_number));
 
-			return ($query) ?  $query->result() : FALSE;
-		}
+        return ($query) ? $query->result() : false;
+    }
 
-		public function getTotal($manifest_number){
-			$sql = "SELECT IFNULL(w.waybill_number, 'TOTAL') AS waybill_number,c1.name as consignee,c2.name as consignor, w.prepaid, w.collect, GROUP_CONCAT(wi.quantity,' ', wi.item_description) as remarks
+    public function getTotal($manifest_number)
+    {
+        $sql = "SELECT IFNULL(w.waybill_number, 'TOTAL') AS waybill_number,c1.name as consignee,c2.name as consignor, w.prepaid, w.collect, GROUP_CONCAT(wi.quantity,' ', wi.item_description) as remarks
 					FROM
-						( 
+						(
 					        SELECT w.waybill_number,
 					      	SUM(IF(w.payment_terms = 'prepaid', w.total, NULL)) as prepaid,
 					      	SUM(IF(w.payment_terms = 'collect', w.total, NULL)) as collect
@@ -282,32 +298,32 @@
 					LEFT JOIN waybill_items wi 	ON wi.waybill_number = wb.waybill_number
 					GROUP BY waybill_number";
 
-			$query = $this->db->query($sql, array($manifest_number));
+        $query = $this->db->query($sql, array($manifest_number));
 
-			if($query->num_rows() > 1){
-				return $query->result();
-			}
-		}
+        if ($query->num_rows() > 1) {
+            return $query->result();
+        }
+    }
 
-		public function getGrandTotal($manifest_number){
-			$sql = "SELECT SUM(w.total) as grand_total FROM manifest_waybill mw 
-					JOIN waybill w 
+    public function getGrandTotal($manifest_number)
+    {
+        $sql = "SELECT SUM(w.total) as grand_total FROM manifest_waybill mw
+					JOIN waybill w
 					ON w.waybill_number = mw.waybill_number
 					WHERE manifest_number = ?";
-			$query = $this->db->query($sql, array($manifest_number));
-			return $query->row_array();
-		}
+        $query = $this->db->query($sql, array($manifest_number));
+        return $query->row_array();
+    }
 
-		public function getTotalPayments($manifest_number){
-			$sql = "SELECT SUM( p.amount ) as payments
+    public function getTotalPayments($manifest_number)
+    {
+        $sql = "SELECT SUM( p.amount ) as payments
 					FROM payment p
 					JOIN waybill w ON w.waybill_number = p.waybill_number
 					JOIN manifest_waybill mw ON mw.waybill_number = w.waybill_number
 					WHERE mw.manifest_number = ?";
-			$query = $this->db->query($sql, array($manifest_number));
-			return $query->row_array();
-		}
+        $query = $this->db->query($sql, array($manifest_number));
+        return $query->row_array();
+    }
 
-		
-	}
-?> 
+}
