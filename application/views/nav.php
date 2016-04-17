@@ -29,7 +29,7 @@
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="<?php echo base_url();?>user/changePassword"> Change Password</a></li>
 							<li class="divider"></li>
-							<li><a href="<?php echo base_url();?>user/logout"><span class='glyphicon glyphicon-log-out'></span> Logout</a></li>
+							<li><a href="<?php echo base_url();?>logout"><span class='glyphicon glyphicon-log-out'></span> Logout</a></li>
 						</ul>
 					</li>
 				</ul>

@@ -38,7 +38,7 @@
 |
 */
 
-$route['default_controller'] = 'user';
+$route['default_controller'] = 'auth';
 $route['404_override'] = '';
 
 // WAYBILL
@@ -48,7 +48,7 @@ $route['waybill/details/(:num)'] = 'waybill/getDetails/$1';
 $route['manifest/details/(:num)'] = 'manifest/getDetails/';
 
 // USER
-$route['logout'] = 'user/logout';
+$route['logout'] = 'auth/logout';
 // $route['user']	 ='user/show';
 $route['user/edit/(:num)'] = 'user/updateUser/$1';
 $route['user/change/password/(:num)'] = 'user/changePassword/$1';

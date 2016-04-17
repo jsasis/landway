@@ -16,7 +16,7 @@
 						<div class='panel-body login'>
 							<div class='row'>
 								<div class='col-md-8 col-md-offset-2'>
-									<?php echo form_open( "user/login", array( 'class'=>'form-horizontal'));?>
+									<?php echo form_open( "auth/login", array( 'class'=>'form-horizontal'));?>
 									<?php if(validation_errors()): ?>
 									<div class='form-group'>
 										<div class='alert alert-danger'>
