@@ -6,7 +6,7 @@ class Manifest extends CI_Controller {
 		parent::__construct();
 
 		if(!$this->session->userdata('logged_in')){
-			redirect('user');
+			return redirect('user');
 		}
 
 		$libraries 	= array(
@@ -32,7 +32,7 @@ class Manifest extends CI_Controller {
 		$this->load->model('truck_model');
 		$data['trucks'] = $this->truck_model->getTrucks();
 
-		$this->load->view('manifest/manifest', $data);
+		return $this->load->view('manifest/manifest', $data);
 	}
 
 	public function listManifest($query_id = 0){
@@ -77,7 +77,7 @@ class Manifest extends CI_Controller {
 		$data['total'] 	= $total_rows;
 
 
-		$this->load->view('manifest/list', $data);
+		return $this->load->view('manifest/list', $data);
 	}
 
 	public function search(){
@@ -86,13 +86,13 @@ class Manifest extends CI_Controller {
 			);
 		$query_id = $this->input->save_query($query_array);
 
-		redirect("manifest/listManifest/$query_id");
+		return redirect("manifest/listManifest/$query_id");
 	}
 
 	public function getDetails(){
 		$this->noCache();
 		$manifest_number = $this->uri->segment(3);
-		if(!$manifest_number) redirect("error/error_404");
+		if(!$manifest_number) return redirect("error/error_404");
 
 		$data['manifest_details']	= $this->manifest_model->getManifest($manifest_number);			
 		
@@ -115,10 +115,10 @@ class Manifest extends CI_Controller {
 			if($this->input->is_ajax_request()){
 				echo $this->load->view('manifest/manifest_collections_ajax', $data, NULL, TRUE);
 			}else{
-				$this->load->view('manifest/manifest_collections', $data);
+				return $this->load->view('manifest/manifest_collections', $data);
 			}
 		}else{
-			$this->load->view('manifest/manifest_details', $data);
+			return $this->load->view('manifest/manifest_details', $data);
 		}
 	}
 
@@ -130,7 +130,7 @@ class Manifest extends CI_Controller {
 		$data['grand_total']		= $this->manifest_model->getGrandTotal($manifest_number);
 		$data['total_payments']		= $this->manifest_model->getTotalPayments($manifest_number);
 
-		$this->load->view('manifest/manifest_collections', $data);
+		return $this->load->view('manifest/manifest_collections', $data);
 	}
 
 	public function typeAhead(){
@@ -230,7 +230,7 @@ class Manifest extends CI_Controller {
 
 	public function update(){
 		$manifest_number = $this->uri->segment(3);
-		if(!$manifest_number) redirect("error/error_404");
+		if(!$manifest_number) return redirect("error/error_404");
 
 		$data['manifest_details']	= $this->manifest_model->getManifest($manifest_number);			
 
@@ -267,13 +267,13 @@ class Manifest extends CI_Controller {
 		$data['trucks'] = $this->truck_model->getTrucks();
 		$data['manifest_waybills']	= $this->manifest_model->getManifestWaybills($manifest_number, NULL, NULL, TRUE);
 
-		$this->load->view('manifest/update_manifest', $data);
+		return $this->load->view('manifest/update_manifest', $data);
 	}
 
 	public function clear(){
 		$params = $this->uri->segment(3);
 		if($this->manifest_model->clear($params)){
-			redirect('manifest/update/'.$params);
+			return redirect('manifest/update/'.$params);
 		}
 	}
 
@@ -319,7 +319,7 @@ class Manifest extends CI_Controller {
 		$data['manifest_waybills']	= $this->manifest_model->getManifestWaybills($manifest_number, FALSE);
 		$data['grand_total']		= $this->manifest_model->getGrandTotal($manifest_number);
 
-		$this->load->view('manifest/manifest_print', $data);
+		return $this->load->view('manifest/manifest_print', $data);
 	}
 
 	public function printManifestCollections(){
@@ -330,7 +330,7 @@ class Manifest extends CI_Controller {
 		$data['grand_total']		= $this->manifest_model->getGrandTotal($manifest_number);
 		$data['total_payments']		= $this->manifest_model->getTotalPayments($manifest_number);
 
-		$this->load->view('manifest/manifest_collections_print', $data);
+		return $this->load->view('manifest/manifest_collections_print', $data);
 	}
 
 	public function export(){

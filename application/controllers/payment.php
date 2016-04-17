@@ -6,7 +6,7 @@
 			parent::__construct();
 
 			if(!$this->session->userdata('logged_in')){
-				redirect('user');
+				return redirect('user');
 			}
 
 			$libraries 	= array(
@@ -58,7 +58,7 @@
 			$data['end']	= $end;
 			$data['total'] 	= $total_rows;
 
-			$this->load->view('payment/payment', $data);
+			return $this->load->view('payment/payment', $data);
 		}
 
 		public function save(){
@@ -95,7 +95,7 @@
 		public function add(){
 			$this->load->model('waybill_model');
 			$data['waybill_numbers'] = $this->waybill_model->getWaybill();
-			$this->load->view('payment/payment_new', $data);
+			return $this->load->view('payment/payment_new', $data);
 		}
 
 		public function delete(){

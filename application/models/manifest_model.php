@@ -2,12 +2,12 @@
 	class Manifest_model extends CI_Model {
 		private $table = 'manifest';
 
-		function __construct() {
+		public function __construct() {
 			parent::__construct();
 			//date_default_timezone_set('Asia/Hong_Kong');
 		}
 
-		function create($data){
+		public function create($data){
 			if(!isset($data['manifest_number'])){
 				$insert = $this->db->insert($this->table, $data['manifest_data']);	// add new manifest
 				$insert_id = $this->db->insert_id();
@@ -28,7 +28,7 @@
 			}
 		}
 
-		function update($data){
+		public function update($data){
 			foreach($data['waybills'] as $row){
 				$insert_waybills[] 			= array(
 					'manifest_number'	=> $data['manifest_number'],
@@ -59,7 +59,7 @@
 			}
 		}
 
-		function unload($data){
+		public function unload($data){
 			$this->db->trans_start();
 
 			$this->db->where('waybill_number', $data);
@@ -77,7 +77,7 @@
 			}
 		}
 
-		function delete($manifest_number){
+		public function delete($manifest_number){
 			if($this->clearedToDelete($manifest_number)){
 				$this->db->where('manifest_number', $manifest_number);
 				$this->db->delete($this->table);
@@ -88,7 +88,7 @@
 			}
 		}
 
-		// function delete($data){
+		// public function delete($data){
 		// 	for($i=0; $i<sizeof($data); $i++){
 		// 		if($this->clearedToDelete($data[$i])){
 		// 			$this->db->where('manifest_number', $data[$i]);
@@ -99,7 +99,7 @@
 		// 	}
 		// }
 
-		function clearedToDelete($manifest_number){
+		public function clearedToDelete($manifest_number){
 			$sql = "SELECT COUNT(*) as count FROM waybill
 					JOIN manifest_waybill
 					ON manifest_waybill.waybill_number = waybill.waybill_number
@@ -115,7 +115,7 @@
 			}
 		}
 		
-		function fetch($query_array, $limit, $start, $truck_id = NULL) {
+		public function fetch($query_array, $limit, $start, $truck_id = NULL) {
 			$this->db->select("CONCAT(day(date),month(date),'-', SUBSTRING_INDEX(t.plate_number, ' ', 1), manifest_number) AS alpha, manifest_number, t.plate_number, driver, trip_to, date", FALSE);
 			$this->db->join('truck t', 't.truck_id = manifest.truck_id');
 			$this->db->order_by('manifest_number DESC');
@@ -149,7 +149,7 @@
 			return $ret;
 		}
 
-		function getManifest($manifest_number){
+		public function getManifest($manifest_number){
 			$sql = "SELECT CONCAT(day(date), month(date),'-',SUBSTRING_INDEX(t.plate_number, ' ', 1),manifest_number) AS alpha, manifest_number, t.truck_id as truck_id, t.plate_number, driver, trip_to, date
 					, CONCAT(ua.first_name,' ', ua.last_name) as processed_by
 					FROM manifest 
@@ -166,7 +166,7 @@
 			}
 		}
 
-		function getManifestWaybills($manifest_number, $collections = NULL, $waybill_number = NULL, $loaded_view = NULL){
+		public function getManifestWaybills($manifest_number, $collections = NULL, $waybill_number = NULL, $loaded_view = NULL){
 			// STANDARD VIEW
 			if(!$collections && !$loaded_view) {
 				$sql = "SELECT IFNULL(w.waybill_number, 'TOTAL') AS waybill_number,c1.name as consignee,c2.name as consignor, w.prepaid, w.collect,
@@ -252,7 +252,7 @@
 			return ($query) ?  $query->result() : FALSE;
 		}
 
-		function getWaybillCollection($manifest_number = NULL){
+		public function getWaybillCollection($manifest_number = NULL){
 			$sql = "SELECT DISTINCT mw.waybill_number
 			      	FROM manifest_waybill mw
 			      	JOIN waybill w  ON w.waybill_number = mw.waybill_number
@@ -264,7 +264,7 @@
 			return ($query) ?  $query->result() : FALSE;
 		}
 
-		function getTotal($manifest_number){
+		public function getTotal($manifest_number){
 			$sql = "SELECT IFNULL(w.waybill_number, 'TOTAL') AS waybill_number,c1.name as consignee,c2.name as consignor, w.prepaid, w.collect, GROUP_CONCAT(wi.quantity,' ', wi.item_description) as remarks
 					FROM
 						( 
@@ -289,7 +289,7 @@
 			}
 		}
 
-		function getGrandTotal($manifest_number){
+		public function getGrandTotal($manifest_number){
 			$sql = "SELECT SUM(w.total) as grand_total FROM manifest_waybill mw 
 					JOIN waybill w 
 					ON w.waybill_number = mw.waybill_number
@@ -298,7 +298,7 @@
 			return $query->row_array();
 		}
 
-		function getTotalPayments($manifest_number){
+		public function getTotalPayments($manifest_number){
 			$sql = "SELECT SUM( p.amount ) as payments
 					FROM payment p
 					JOIN waybill w ON w.waybill_number = p.waybill_number

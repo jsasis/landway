@@ -7,7 +7,7 @@ class Customer extends CI_Controller {
 		parent::__construct();
 
 		if(!$this->session->userdata('logged_in')){
-			redirect('user');
+			return redirect('user');
 		}
 		
 		$this->load->model('customer_model');
@@ -57,7 +57,7 @@ class Customer extends CI_Controller {
 		$data['end']	= $end;
 		$data['total'] 	= $total_rows;
 
-		$this->load->view('customer/customer', $data);
+		return $this->load->view('customer/customer', $data);
 	}
 
 	public function searchCustomer(){
@@ -67,18 +67,18 @@ class Customer extends CI_Controller {
 		
 		$query_id = $this->input->save_query($query_array);
 
-		redirect("customer/show/$query_id");
+		return redirect("customer/show/$query_id");
 	}
 
 	public function add(){
-		$this->load->view('customer/customer_new');
+		return $this->load->view('customer/customer_new');
 	}
 
 	public function update(){
 		$customerID = $this->uri->segment(3);
 
 		if($result['result'] = $this->customer_model->read($customerID)){
-			$this->load->view('customer/update_customer',$result);
+			return $this->load->view('customer/update_customer',$result);
 		}
 	}
 

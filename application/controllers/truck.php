@@ -8,10 +8,10 @@ class Truck extends CI_Controller{
 		parent::__construct();
 
 		if(!$this->session->userdata('logged_in')){
-			redirect('user');
+			return redirect('user');
 		}else{
 			if($this->session->userdata('logged_in')['role'] !== 'admin'){
-				redirect('error/error_403');
+				return redirect('error/error_403');
 			}
 		}
 
@@ -53,11 +53,11 @@ class Truck extends CI_Controller{
 		$data['end']	= $end;
 		$data['total'] 	= $total_rows;
 
-		$this->load->view('truck/truck', $data);
+		return $this->load->view('truck/truck', $data);
 	}
 
 	public function add(){
-		$this->load->view('truck/add_truck');
+		return $this->load->view('truck/add_truck');
 	}
 
 	public function save(){
@@ -148,20 +148,20 @@ class Truck extends CI_Controller{
 
 		if($data['result'] = $this->truck_model->read($truck_id)){
 
-			$this->load->view('truck/update_truck', $data);
+			return $this->load->view('truck/update_truck', $data);
 		}else{
-			redirect('error/db_error');
+			return redirect('error/db_error');
 		}
 	}
 
 	public function search(){
 		if($this->truck_model->search()){
 			$result['result'] = $this->truck_model->search();
-			$this->load->view('truck/truck_ajax', $result);
+			return $this->load->view('truck/truck_ajax', $result);
 		}else{
 			$result['result'] = $this->truck_model->search();
 				//$this->pagination->reset();
-			$this->load->view('truck/truck_ajax', $result);
+			return $this->load->view('truck/truck_ajax', $result);
 		}
 	}
 
@@ -171,12 +171,12 @@ class Truck extends CI_Controller{
 		if($typeOfReport) {
 			if($typeOfReport == "gross") {
 				$data['trucks']	= $this->truck_model->getTrucks();
-				$this->load->view('truck/truck_report', $data);
+				return $this->load->view('truck/truck_report', $data);
 			} elseif($typeOfReport == "annual") {
-				$this->load->view('truck/truck_report_annual');
+				return $this->load->view('truck/truck_report_annual');
 			}
 		} else {
-			redirect("error/error_404");
+			return redirect("error/error_404");
 		}
 	}
 

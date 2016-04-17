@@ -2,11 +2,11 @@
 	
 	class Item_Model extends CI_Model {
 
-		function __construct() {
+		public function __construct() {
 			parent::__construct();
 		}
 
-		function create() {
+		public function create() {
 			$data = array(
 				'quantity' => $this->input->post('quantity'),
 				'description' => $this->input->post('description'),

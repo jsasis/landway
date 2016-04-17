@@ -6,7 +6,7 @@
 			parent::__construct();
 
 			if(!$this->session->userdata('logged_in')){
-				redirect('user');
+				return redirect('user');
 			}
 			
 			$this->load->library('pagination');
@@ -45,18 +45,18 @@
 			$data['end']	= $end;
 			$data['total'] 	= $total_rows;
 
-			$this->load->view('unit/unit', $data);
+			return $this->load->view('unit/unit', $data);
 
 			/*
 			
 			$data['result'] = $this->unit_model->read();
 
-			$this->load->view('unit',$data);*/
+			return $this->load->view('unit',$data);*/
 		}
 
 		public function addUnit(){
 			
-			$this->load->view('unit/add_unit');
+			return $this->load->view('unit/add_unit');
 		}
 
 		public function getSubItems(){
@@ -67,10 +67,10 @@
 				$data["item"] = $this->unit_model->read($unit_id);
 				$data["sub_items"] = $this->unit_category_model->getSubItems($unit_id);
 
-				$this->load->view("unit/unit_items", $data);
+				return $this->load->view("unit/unit_items", $data);
 
 			} else {
-				redirect("error/error_404");
+				return redirect("error/error_404");
 			}
 		}
 
@@ -123,7 +123,7 @@
 			$unitID = $this->uri->segment(3);
 
 			if($result['result'] = $this->unit_model->read($unitID)){
-				$this->load->view('unit/update_unit',$result);
+				return $this->load->view('unit/update_unit',$result);
 			}else{
 				echo "ERROR.";
 			}
@@ -132,11 +132,11 @@
 		public function search(){
 			if($this->unit_model->search()){
 				$result['result'] = $this->unit_model->search();
-				$this->load->view('unit/unit_ajax', $result);
+				return $this->load->view('unit/unit_ajax', $result);
 			}else{
 				$result['result'] = $this->unit_model->search();
 				//$this->pagination->reset();
-				$this->load->view('unit/unit_ajax', $result);
+				return $this->load->view('unit/unit_ajax', $result);
 			}
 		}
 
@@ -153,13 +153,13 @@
 			$data['result'] = $this->unit_model->fetchUnit($page, $config['per_page']);
 			$data['links'] = $this->pagination->reset();
 
-			$this->load->view('unit', $data);*/
+			return $this->load->view('unit', $data);*/
 
 			/*
 			
 			$data['result'] = $this->unit_model->read();
 
-			$this->load->view('unit',$data);*/
+			return $this->load->view('unit',$data);*/
 		}
 
 		public function isLoggedIn(){

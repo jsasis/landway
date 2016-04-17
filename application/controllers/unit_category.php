@@ -6,7 +6,7 @@
 			parent::__construct();
 			
 			if(!$this->session->userdata('logged_in')){
-				redirect('user');
+				return redirect('user');
 			}
 
 			$this->load->library('pagination');
@@ -47,7 +47,7 @@
 			$data['end']	= $end;
 			$data['total'] 	= $total_rows;
 
-			$this->load->view('unit_category/unit_category', $data);
+			return $this->load->view('unit_category/unit_category', $data);
 		}
 
 		public function save() {
@@ -95,7 +95,7 @@
 
 		public function add(){
 			$data['unit'] = $this->getUnits();
-			$this->load->view('unit_category/add_unit_category',$data);
+			return $this->load->view('unit_category/add_unit_category',$data);
 		}
 
 		public function update(){
@@ -103,7 +103,7 @@
 			$result['unit'] = $this->getUnits();
 
 			if($result['result'] = $this->unit_category_model->read($unitID)){
-				$this->load->view('unit_category/update_unit_category',$result);
+				return $this->load->view('unit_category/update_unit_category',$result);
 			}
 		}
 

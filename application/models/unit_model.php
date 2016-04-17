@@ -2,12 +2,12 @@
 	
 	class Unit_Model extends CI_Model{
 
-		function __construct(){
+		public function __construct(){
 		
 			parent::__construct();
 		}
 
-		function create($data = null) {
+		public function create($data = null) {
 			if(isset($data['unit_id'])){
 				$this->db->where('unit_id',$data['unit_id']);
 				if($this->db->update('unit',$data)){
@@ -24,7 +24,7 @@
 			}
 		}
 
-		function read($unitID = null) {
+		public function read($unitID = null) {
 			if($unitID == null) {
 				$this->db->order_by('unit_id','desc');
 				$query = $this->db->get('unit');
@@ -39,7 +39,7 @@
 			}
 		}
 
-		function deleteAll($data) {
+		public function deleteAll($data) {
 			for($i=0; $i<sizeof($data); $i++){
 
 				$this->db->where('unit_id',$data[$i]);
@@ -48,12 +48,12 @@
 			return true;
 		}
 
-		function recordCount() {
+		public function recordCount() {
 			
 			return $this->db->count_all('unit');
 		}
 
-		function fetchUnit($limit, $start) {
+		public function fetchUnit($limit, $start) {
 		  $sql = "SELECT unit_id, unit_code, description from unit ORDER BY unit_id desc  limit ?,?";
 		  $query = $this->db->query($sql, array(intval($limit), intval($start)));
 
@@ -63,7 +63,7 @@
 		  return false;
 		}
 
-		function search() {
+		public function search() {
 			$data = $this->input->post('search');
 			$this->db->like('description',$data);
 			$this->db->limit('5');

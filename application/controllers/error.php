@@ -13,11 +13,11 @@
 		}
 
 		public function error_403(){
-			$this->load->view('error/error_403');
+			return $this->load->view('error/error_403');
 		}
 
 		public function db_error(){
-			$this->load->view('error/db_error');
+			return $this->load->view('error/db_error');
 		}
 	}
 ?>

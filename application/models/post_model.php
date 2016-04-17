@@ -3,11 +3,11 @@
 		
 		private $table = 'posts';
 
-		function __construct() {
+		public function __construct() {
 			parent::__construct();
 		}
 
-		function create($data){
+		public function create($data){
 			if(!isset($data['id']))
 			{
 				$query = $this->db->insert($this->table, $data);
@@ -19,7 +19,7 @@
 			return ($query) ? TRUE : FALSE;
 		}
 
-		function findAll() {
+		public function findAll() {
 			$this->db->select('u.user_id, u.first_name, u.last_name, p.id, p.post_title, p.post_body, p.post_date');
 			$this->db->join('user_account u', 'u.user_id = p.posted_by');
 			$this->db->order_by('p.id', 'desc');
@@ -30,7 +30,7 @@
 			return $query->result();
 		}
 
-		function findById($id) {
+		public function findById($id) {
 			$this->db->select('u.first_name, u.last_name, p.id, p.post_title, p.post_body, p.post_date');
 			$this->db->join('user_account u', 'u.user_id = p.posted_by');
 			$this->db->where('id', $id);
@@ -40,7 +40,7 @@
 			return $query->row();
 		}
 
-		function delete($post_id) {
+		public function delete($post_id) {
 			$this->db->where('id', $post_id);
 
 			if($this->db->delete($this->table)) {
@@ -50,12 +50,12 @@
 			}
 		}
 
-		function recordCount() {
+		public function recordCount() {
 			
 			return $this->db->count_all($this->table);	
 		}
 
-		function fetch($limit, $start) {
+		public function fetch($limit, $start) {
 			$this->db->order_by('id');
 
 			$query = $this->db->get($this->table, $limit, $start);

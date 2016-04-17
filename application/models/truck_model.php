@@ -4,11 +4,11 @@ class Truck_Model extends CI_Model{
 
 	private $table = 'truck';
 
-	function __construct(){
+	public function __construct(){
 		parent::__construct();
 	}
 
-	function create($data = null){
+	public function create($data = null){
 		if(isset($data['truck_id'])){
 			$this->db->where('truck_id',$data['truck_id']);
 			if($this->db->update($this->table, $data)){
@@ -25,7 +25,7 @@ class Truck_Model extends CI_Model{
 		}
 	}
 
-	function read($truckID = null){
+	public function read($truckID = null){
 		if($truckID == null){
 			$this->db->order_by('truck_id','desc');
 			$query = $this->db->get($this->table);
@@ -39,7 +39,7 @@ class Truck_Model extends CI_Model{
 		}
 	}
 
-	function delete($data){
+	public function delete($data){
 		for($i=0; $i<sizeof($data); $i++){
 			$this->db->where('truck_id',$data[$i]);
 			$this->db->delete($this->table);
@@ -48,12 +48,12 @@ class Truck_Model extends CI_Model{
 		return true;
 	}
 
-	function recordCount(){
+	public function recordCount(){
 
 		return $this->db->count_all($this->table);
 	}
 
-	function fetch($limit, $start) {
+	public function fetch($limit, $start) {
 	  $sql = "SELECT * FROM truck ORDER BY truck_id DESC  LIMIT ?, ?";
 	  $query = $this->db->query($sql, array(intval($limit), intval($start)));
 
@@ -63,7 +63,7 @@ class Truck_Model extends CI_Model{
 	  return false;
 	}
 
-	function getTrucks(){
+	public function getTrucks(){
 		$this->db->select('truck_id, plate_number');
 		$query = $this->db->get($this->table);
 
@@ -75,7 +75,7 @@ class Truck_Model extends CI_Model{
 		}
 	}
 
-	function generate_report($data){
+	public function generate_report($data){
 		if($data['truck_id'] == 'all'){
 			$sql = "SELECT IFNULL(i.plate_number, 'TOTAL') as truck, i.amount as total
 					FROM ( 
@@ -110,7 +110,7 @@ class Truck_Model extends CI_Model{
 		return($query->num_rows > 0) ? $query->result() : FALSE;
 	}
 
-	function generate_report_annual($data) {
+	public function generate_report_annual($data) {
 		$sql = "SELECT IFNULL(totals.plate_number, 'Total') as truck, totals.January, totals.February, totals.March, totals.April, totals.May, 
 						totals.June, totals.July, totals.August, totals.September, totals.October, totals.November, totals.December,
 						(totals.January + totals.February + totals.March + totals.April + totals.May + totals.June + totals.July + totals.August + totals.September + totals.October + 

@@ -4,11 +4,11 @@ class Unit_Category_Model extends CI_Model{
 
 	private $table = 'unit_category';
 
-	function __construct(){
+	public function __construct(){
 		parent::__construct();
 	}
 
-	function create($data){
+	public function create($data){
 		if(isset($data['unit_category_id'])){
 
 			$this->db->where('unit_category_id', $data['unit_category_id']);
@@ -41,7 +41,7 @@ class Unit_Category_Model extends CI_Model{
 		}
 	}
 
-	function read($unitID = null){
+	public function read($unitID = null){
 		if($unitID == null){
 			$this->db->order_by('unit_category_id','DESC');
 			$query = $this->db->get($this->table);
@@ -57,7 +57,7 @@ class Unit_Category_Model extends CI_Model{
 		}
 	}
 
-	function deleteAll($data){
+	public function deleteAll($data){
 		for($i=0; $i<sizeof($data); $i++){
 			$this->db->where('unit_category_id',$data[$i]);
 			$this->db->delete($this->table);
@@ -65,7 +65,7 @@ class Unit_Category_Model extends CI_Model{
 		return true;
 	}
 
-	function recordCount(){
+	public function recordCount(){
 		$this->db->select('uc.unit_category_id, u.unit_code as unit, uc.description, ct.cost as unit_cost');
 		$this->db->join('unit_category uc', 'uc.unit_category_id = ct.unit_category_id');
 		$this->db->join('unit u', 'u.unit_id = uc.unit_id');
@@ -75,7 +75,7 @@ class Unit_Category_Model extends CI_Model{
 		return $this->db->count_all_results('costing ct');
 	}
 
-	function fetchUnit($limit, $start) {
+	public function fetchUnit($limit, $start) {
 		$this->db->select('uc.unit_category_id, u.unit_code as unit, uc.description, ct.cost as unit_cost');
 		$this->db->join('unit_category uc', 'uc.unit_category_id = ct.unit_category_id');
 		$this->db->join('unit u', 'u.unit_id = uc.unit_id');
@@ -90,7 +90,7 @@ class Unit_Category_Model extends CI_Model{
 		}
 	}
 
-	function getSubItems($unit_id) {
+	public function getSubItems($unit_id) {
 		$this->db->select('uc.unit_category_id, u.unit_code as unit, uc.description, ct.cost as unit_cost');
 		$this->db->join('unit_category uc', 'uc.unit_category_id = ct.unit_category_id');
 		$this->db->join('unit u', 'u.unit_id = uc.unit_id');
@@ -102,7 +102,7 @@ class Unit_Category_Model extends CI_Model{
 		return $query->result();
 	}
 
-	function getCurrentRates() {
+	public function getCurrentRates() {
 		$this->db->select('uc.unit_category_id, u.unit_code as unit, uc.description, ct.cost as unit_cost');
 		$this->db->join('unit_category uc', 'uc.unit_category_id = ct.unit_category_id');
 		$this->db->join('unit u', 'u.unit_id = uc.unit_id');
@@ -119,7 +119,7 @@ class Unit_Category_Model extends CI_Model{
 	}
 
 	// get item and cost details
-	function getItemPrice(){
+	public function getItemPrice(){
 		/*$data = $this->input->post('description');
 		$this->db->select('unit.unit_code as unit, unit_category_id, unit_cost');
 		$this->db->join('unit','unit_category.unit_id = unit.unit_id');
@@ -150,7 +150,7 @@ class Unit_Category_Model extends CI_Model{
 	}
 
 	// get items to feed typeahead
-	function getItems(){
+	public function getItems(){
 		/*$sql = "SELECT CONCAT(description,' - ',unit_cost) as description FROM unit_category";
 		$query = $this->db->query($sql);
 		return $query->result(); // get data for typeahead*/

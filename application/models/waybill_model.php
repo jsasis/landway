@@ -2,12 +2,12 @@
 	class Waybill_Model extends CI_Model {
 		private $table = 'waybill';
 
-		function __construct() {
+		public function __construct() {
 
 			parent::__construct();
 		}
 		
-		function fetch($query_array, $limit, $start){
+		public function fetch($query_array, $limit, $start){
 			$this->db->select('w.waybill_number, c1.name as consignee, c2.name as consignor, status, is_backload, notes, total, transaction_date, t.plate_number, mw.delivery_status, m.manifest_number');
 			$this->db->select_sum('p.amount','payment');
 			$this->db->join('customer c1','c1.customer_id = w.consignee');
@@ -50,7 +50,7 @@
 			return $ret;
 		}
 
-		function create($data){
+		public function create($data){
 			if(!isset($data['waybill_number'])){ // WAYBILL# DOESN'T EXIST, WE ARE CREATING A NEW WAYBILL
 				$this->db->trans_start();
 					// Insert Waybill Details
@@ -137,7 +137,7 @@
 			}	
 		}
 
-		function addPayment($data){
+		public function addPayment($data){
 			$this->load->model('payment_model');
 			if($this->payment_model->create($data)){
 				return TRUE;
@@ -146,7 +146,7 @@
 			}
 		}
 
-		function delete($data){
+		public function delete($data){
 			for($i=0; $i<sizeof($data); $i++){
 				$this->db->where('waybill_number',$data[$i]);
 				$this->db->delete($this->table);
@@ -154,7 +154,7 @@
 			return TRUE;
 		}
 
-		function getDetails($waybill_number, $is_by_batch = TRUE, $return_object = FALSE){
+		public function getDetails($waybill_number, $is_by_batch = TRUE, $return_object = FALSE){
 			$this->db->select("waybill.waybill_number,c1.customer_id as consignee_id,c1.name as consignee, waybill.status, t.plate_number as truck, waybill.dr_number, waybill.is_backload, waybill.notes,
 								c1.complete_address as address1,c2.customer_id as consignor_id,c2.name as consignor,c2.complete_address as address2, payment_terms, mw.delivery_status,
 			 					transaction_date, total, CONCAT(ua.first_name,' ', ua.last_name) as processed_by ", FALSE);
@@ -188,7 +188,7 @@
 			}
 		}
 
-		function getWaybill(){
+		public function getWaybill(){
 			$sql = "SELECT waybill_number, c1.name as consignee, c2.name as consignor, payment_terms, total, transaction_date
 					FROM waybill
 					JOIN customer c1 ON waybill.consignee = c1.customer_id
@@ -200,7 +200,7 @@
 			return $query->result();
 		}
 
-		function getItems($waybill_number, $is_by_batch){
+		public function getItems($waybill_number, $is_by_batch){
 			$this->db->SELECT(" wi.waybill_number,(CASE WHEN u.unit_code IS NULL THEN unit ELSE u.unit_code END) as unit_code, uc.description, wi.cost_id, (CASE WHEN c.cost_id IS NOT NULL AND wi.cost IS NOT NULL THEN wi.cost WHEN c.cost_id IS NULL AND wi.cost IS NOT NULL THEN wi.cost ELSE c.cost END) as unit_cost, 
 								quantity, item_description, wi.sub_total, w.transaction_date", FALSE);
 			$this->db->JOIN('waybill w','w.waybill_number = wi.waybill_number');
@@ -220,7 +220,7 @@
 			return ($query) ?  $query->result() : FALSE;
 		}
 
-		function getReceived(){
+		public function getReceived(){
 			$sql = "SELECT waybill_number,c1.name as consignee,c2.name as consignor, transaction_date
 					FROM waybill 
 					JOIN customer c1 ON waybill.consignee = c1.customer_id
@@ -234,7 +234,7 @@
 			return $query->result();
 		}
 		
-		function getUnloaded($limit, $start){
+		public function getUnloaded($limit, $start){
 
 			$sql = "SELECT waybill_number,c1.name as consignee,c2.name as consignor, transaction_date
 					FROM waybill 
@@ -253,7 +253,7 @@
 			return $ret;
 		}
 
-		function getUnloadedTypeAhead(){
+		public function getUnloadedTypeAhead(){
 			$this->db->select('waybill_number');
 			$this->db->where('status', 'Received');
 			$this->db->order_by('waybill_number DESC');
@@ -263,7 +263,7 @@
 			return $query->result();
 		}
 
-		function getUncollected($limit, $start){
+		public function getUncollected($limit, $start){
 			$sql = "SELECT * FROM
 					(
 					    SELECT w.waybill_number, c1.name as consignee, c2.name as consignor, w.status, w.transaction_date, w.total, w.total - COALESCE(SUM(p.amount),0) as balance
@@ -286,7 +286,7 @@
 			}
 		}
 
-		function getPrepaid($limit, $start){
+		public function getPrepaid($limit, $start){
 			$sql = "SELECT w.waybill_number, c1.name as consignee, c2.name as consignor, w.status, w.payment_terms, w.transaction_date, w.total
 					FROM waybill w
 					JOIN manifest_waybill mw ON mw.waybill_number = w.waybill_number
@@ -304,7 +304,7 @@
 			}
 		}
 
-		function getBackload($limit, $start){
+		public function getBackload($limit, $start){
 			$sql = "SELECT w.waybill_number, c1.name as consignee, c2.name as consignor, w.status, w.transaction_date, w.total
 					FROM waybill w
 					JOIN customer c1 ON c1.customer_id = w.consignee
@@ -321,7 +321,7 @@
 			}
 		}
 
-		function countUncollected(){
+		public function countUncollected(){
 			$sql = "SELECT COUNT(*) as total FROM
 					(
 					    SELECT w.waybill_number, c1.name as consignee, c2.name as consignor, w.status, w.transaction_date, w.total, w.total - COALESCE(SUM(p.amount),0) as balance
@@ -343,7 +343,7 @@
 			}
 		}
 
-		function countPrepaid(){
+		public function countPrepaid(){
 			$sql = "SELECT COUNT(*) as total FROM waybill WHERE payment_terms = 'prepaid' ";
 
 			$query = $this->db->query($sql);
@@ -351,13 +351,13 @@
 			return $query->row_array();
 		}
 
-		function countReceived(){
+		public function countReceived(){
 			$this->db->where('status', 'Received');
 
 			return $this->db->count_all_results($this->table);
 		}
 
-		function countBackload(){
+		public function countBackload(){
 			$sql = "SELECT COUNT(*) as total FROM waybill WHERE is_backload = true ";
 
 			$query = $this->db->query($sql);
@@ -365,7 +365,7 @@
 			return $query->row()->total;
 		}
 
-		function computePrepaid($data = '') {
+		public function computePrepaid($data = '') {
 			
 			$this->db->select('(SELECT SUM(p.amount)) as total_prepaid', FALSE);
 			$this->db->join('payment p', 'p.waybill_number = w.waybill_number');
@@ -387,7 +387,7 @@
 			}	
 		}
 
-		function computeReceived($data = '') {
+		public function computeReceived($data = '') {
 			$this->db->select('(SELECT SUM(total)) as total_received', FALSE);
 			$this->db->where('status', 'received');
 
@@ -407,7 +407,7 @@
 			}	
 		}
 
-		function computeBackload($data = '') {
+		public function computeBackload($data = '') {
 			$this->db->select('(SELECT SUM(total)) as total_backload', FALSE);
 			$this->db->where('is_backload', 1);
 
@@ -427,7 +427,7 @@
 			}	
 		}
 
-		function getAmountPaid($waybill_number){
+		public function getAmountPaid($waybill_number){
 			$sql = "SELECT SUM(amount) as amount FROM payment WHERE waybill_number = ?";
 
 			$query = $this->db->query($sql, array($waybill_number));
@@ -445,7 +445,7 @@
 		/*******************
 				POPULATE DB WITH SAMPLE DATA
 				********************/
-		function insertSampleData(){
+		public function insertSampleData(){
 			$i = 1;
 			while($i <= 300){
 				$data = array(
@@ -465,29 +465,29 @@
 			return TRUE;
 		}
 
-		function randomTerms(){
+		public function randomTerms(){
 			$terms = array('prepaid'=>'prepaid','collect'=>'collect');
 			return array_rand($terms, 1);
 		}
 
-		function randomConsignee(){
+		public function randomConsignee(){
 			$rand = rand(9, 13);
 			return $rand;
 		}
 
-		function randomConsignor(){
+		public function randomConsignor(){
 			$rand = rand(14, 16);
 
 			return $rand;
 		}
 		
-		function randomStatus(){
+		public function randomStatus(){
 			$status = array('Received'=>'Received');
 
 			return array_rand($status, 1);
 		}
 
-		function updateDeliveryStatus($data){
+		public function updateDeliveryStatus($data){
 			$sql = "UPDATE manifest_waybill SET delivery_status = ? WHERE waybill_number = ? AND manifest_number = ?";
 			$query = $this->db->query($sql, array($data['delivery_status'], $data['waybill_number'], $data['manifest_number']));
 
@@ -498,7 +498,7 @@
 			}
 		}
 
-		function getManifestNumber($waybill_number){
+		public function getManifestNumber($waybill_number){
 			$sql = "SELECT manifest_number FROM manifest_waybill WHERE waybill_number = ?";
 			$query = $this->db->query($sql, array($waybill_number));
 

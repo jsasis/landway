@@ -6,7 +6,7 @@
 			parent::__construct();
 			
 			if(!$this->session->userdata('logged_in')){
-				redirect('user');
+				return redirect('user');
 			}
 
 			$this->load->library('form_validation');
@@ -48,7 +48,7 @@
 			$data['end']	= $end;
 			$data['total'] 	= $total_rows;
 
-			$this->load->view('unit_category/unit_category', $data);
+			return $this->load->view('unit_category/unit_category', $data);
 		}*/
 
 		public function save(){

@@ -10,7 +10,7 @@ class User extends CI_Controller{
 	}
 
 	public function index(){
-		$this->load->view('login');
+		return $this->load->view('login');
 	}
 
 	public function show($query_id = 0){
@@ -48,7 +48,7 @@ class User extends CI_Controller{
 		$data['end']	= $end;
 		$data['total'] 	= $total_rows;
 
-		$this->load->view('user/user', $data);
+		return $this->load->view('user/user', $data);
 	}
 
 	public function search(){
@@ -58,11 +58,11 @@ class User extends CI_Controller{
 
 		$query_id = $this->input->save_query($query_array);
 
-		redirect("user/show/$query_id");
+		return redirect("user/show/$query_id");
 	}
 
 	public function add(){
-		$this->load->view('user/user_new');
+		return $this->load->view('user/user_new');
 	}
 
 	public function delete(){
@@ -130,7 +130,7 @@ class User extends CI_Controller{
 			if($this->user_model->saveUpdate($data)){
 				$result['success']	= TRUE;
 			}else{
-				redirect('error/db_error');
+				return redirect('error/db_error');
 			}
 		}else{
 
@@ -149,7 +149,7 @@ class User extends CI_Controller{
 
 	public function changePassword(){
 
-		$this->load->view('user/change_password');
+		return $this->load->view('user/change_password');
 	}
 
 	public function update(){
@@ -186,7 +186,7 @@ class User extends CI_Controller{
 
 		$data['result'] = $this->user_model->getDetails($user_id);
 
-		$this->load->view('user/user_update', $data);
+		return $this->load->view('user/user_update', $data);
 	}
 
 	public function getDetails($update){
@@ -199,13 +199,13 @@ class User extends CI_Controller{
 			$this->load->model('truck_model');
 			$data['trucks'] = $this->truck_model->getTrucks();
 
-			$this->load->view('waybill/update_waybill',$data);
+			return $this->load->view('waybill/update_waybill',$data);
 		}else{
 			$this->load->model('payment_model');
 			$data['payments'] 	= $this->payment_model->getPayment($user_id);
 			$data['amountPaid'] = $this->waybill_model->getAmountPaid($user_id);
 			
-			$this->load->view('waybill/waybill_details',$data);
+			return $this->load->view('waybill/waybill_details',$data);
 		}
 	}
 
@@ -215,9 +215,9 @@ class User extends CI_Controller{
 
 		if($this->form_validation->run() == FALSE){
 
-			$this->load->view('login');
+			return $this->load->view('login');
 		} else {
-			redirect('dashboard');
+			return redirect('dashboard');
 		}
 	}
 
@@ -232,7 +232,7 @@ class User extends CI_Controller{
 			exit();
 		}
 		
-	   redirect('user', 'refresh');
+	   return redirect('user', 'refresh');
 	}
 
 	public function check_database($password){

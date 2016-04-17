@@ -3,11 +3,11 @@
 		
 		private $table = 'payment';
 
-		function __construct() {
+		public function __construct() {
 			parent::__construct();
 		}
 
-		function create($data){
+		public function create($data){
 			if($this->db->insert($this->table, $data)){
 				return TRUE;
 			}else{
@@ -15,7 +15,7 @@
 			}
 		}
 
-		function delete($data){
+		public function delete($data){
 			for($i=0; $i<sizeof($data); $i++){
 				$this->db->where('payment_id', $data[$i]);
 				$this->db->delete($this->table);
@@ -24,11 +24,11 @@
 			return TRUE;
 		}
 
-		function recordCount(){
+		public function recordCount(){
 			return $this->db->count_all($this->table);
 		}
 
-		function fetch($limit, $start) {
+		public function fetch($limit, $start) {
 			$this->db->limit($limit, $start);
 			$query = $this->db->get($this->table);
 			
@@ -39,7 +39,7 @@
 			}
 		}
 
-		function getPayment($waybill_number = NULL){
+		public function getPayment($waybill_number = NULL){
 			$sql = "SELECT payment_id, w.waybill_number, payment.payment_terms, amount, date
 					FROM payment 
 					JOIN waybill w 

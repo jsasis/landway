@@ -5,7 +5,7 @@
 			parent::__construct();
 
 			if(!$this->session->userdata('logged_in')){
-				redirect('user');
+				return redirect('user');
 			}
 
 			$libraries = array(
@@ -69,7 +69,7 @@
 			$data['end']	= $end;
 			$data['total'] 	= $total_rows;
 			
-			$this->load->view('waybill/waybill', $data);
+			return $this->load->view('waybill/waybill', $data);
 		}
 
 		public function search(){
@@ -78,7 +78,7 @@
 			);
 			$query_id = $this->input->save_query($query_array);
 
-			redirect("waybill/show/$query_id");
+			return redirect("waybill/show/$query_id");
 		}
 
 		public function save(){
@@ -173,7 +173,7 @@
 			$this->load->model('truck_model');
 			//$data['result'] = $this->unit_category_model->read();
 			$data['trucks'] = $this->truck_model->getTrucks();
-			$this->load->view('waybill/waybill_new', $data);
+			return $this->load->view('waybill/waybill_new', $data);
 		}
 
 		public function update(){
@@ -229,7 +229,7 @@
 			$data['end']	= $end;
 			$data['total'] 	= $total_rows;
 
-			($data['result'] >= 0) ? $this->load->view('waybill/waybill_uncollected', $data) : redirect('error/db_error');
+			return ($data['result'] >= 0) ? $this->load->view('waybill/waybill_uncollected', $data) : redirect('error/db_error');
 		}
 
 		public function getPrepaid(){
@@ -266,7 +266,7 @@
 			$data['end']	= $end;
 			$data['total'] 	= $total_rows;
 
-			($data['result'] >= 0) ? $this->load->view('waybill/waybill_prepaid', $data) : redirect('error/db_error');
+			return ($data['result'] >= 0) ? $this->load->view('waybill/waybill_prepaid', $data) : redirect('error/db_error');
 		}
 
 		public function getBackload(){
@@ -303,7 +303,7 @@
 			$data['end']	= $end;
 			$data['total'] 	= $total_rows;
 
-			($data['result'] >= 0) ? $this->load->view('waybill/waybill_backload', $data) : redirect('error/db_error');
+			return ($data['result'] >= 0) ? $this->load->view('waybill/waybill_backload', $data) : redirect('error/db_error');
 		}
 
 		public function computePrepaid() {
@@ -341,13 +341,13 @@
 			$data['resultItems'] 	= $this->waybill_model->getItems($waybill_number, FALSE);
 
 			if(count($data['rows']) == 0){
-				redirect('error/error_403');
+				return redirect('error/error_403');
 			}
 
 			if(!empty($data['rows'])){
-				$this->load->view('waybill/waybill_print', $data, NULL, TRUE);
+				return $this->load->view('waybill/waybill_print', $data, NULL, TRUE);
 			}else{
-				redirect('error/db_error');
+				return redirect('error/db_error');
 			}
 		}
 
@@ -358,9 +358,9 @@
 			$data['resultItems'] 	= $this->waybill_model->getItems($waybill_number, TRUE);
 
 			if(!empty($data['rows'])){
-				$this->load->view('waybill/waybill_print', $data);
+				return $this->load->view('waybill/waybill_print', $data);
 			}else{
-				redirect('error/db_error');
+				return redirect('error/db_error');
 			}
 		}
 
@@ -368,9 +368,9 @@
 			$data['result']	= $this->waybill_model->getUncollected(1, 0);
 
 			if(!empty($data['result'])){
-				$this->load->view('waybill/waybill_print_uncollected', $data);
+				return $this->load->view('waybill/waybill_print_uncollected', $data);
 			}else{
-				redirect('error/db_error');
+				return redirect('error/db_error');
 			}
 		}
 
@@ -380,19 +380,19 @@
 			$data['row'] 			= $this->waybill_model->getDetails($waybill_number, NULL, TRUE);
 			$data['resultItems'] 	= $this->waybill_model->getItems($waybill_number, FALSE);
 
-			if(count($data['row']) == 0) redirect('error/error_403');
+			if(count($data['row']) == 0) return redirect('error/error_403');
 				
 			if($update === TRUE){
 				$this->load->model('truck_model');
 				$data['trucks'] = $this->truck_model->getTrucks();
 
-				$this->load->view('waybill/update_waybill', $data);
+				return $this->load->view('waybill/update_waybill', $data);
 			}else{
 				$this->load->model('payment_model');
 				$data['payments'] 	= $this->payment_model->getPayment($waybill_number);
 				$data['amountPaid'] = $this->waybill_model->getAmountPaid($waybill_number);
 				
-				$this->load->view('waybill/waybill_details',$data);
+				return $this->load->view('waybill/waybill_details',$data);
 			}
 		}
 
@@ -419,7 +419,7 @@
 
 			if($this->waybill_model->updateDeliveryStatus($data)){
 				$this->session->set_flashdata('notification','Delivery status has been updated.');
-				redirect("waybill");
+				return redirect("waybill");
 			} else {
 				echo "error";
 			}

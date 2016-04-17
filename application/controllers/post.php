@@ -42,7 +42,7 @@ class Post extends CI_Controller {
 		$data['end']	= $end;
 		$data['total'] 	= $total_rows;
 
-		$this->load->view('post/post', $data);
+		return $this->load->view('post/post', $data);
 	}
 
 	public function save() {
@@ -97,7 +97,7 @@ class Post extends CI_Controller {
 
 		if($this->post_model->delete($post_id))
 		{
-			redirect('dashboard');
+			return redirect('dashboard');
 		}
 	}
 

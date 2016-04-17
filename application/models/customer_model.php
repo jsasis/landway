@@ -3,11 +3,11 @@
 	
 	class Customer_Model extends CI_Model {
 		private $table = 'customer';
-		function __construct(){
+		public function __construct(){
 			parent::__construct();
 		}
 
-		function create($data){
+		public function create($data){
 			if(isset($data['customer_id'])){
 				$this->db->where('customer_id',$data['customer_id']);
 				if($this->db->update($this->table,$data)){
@@ -24,7 +24,7 @@
 			}
 		}
 
-		function read($customerID = null){
+		public function read($customerID = null){
 			if($customerID == null){
 				$this->db->order_by('customer_id','desc');
 				$query = $this->db->get($this->table);
@@ -36,7 +36,7 @@
 			}
 		}
 
-		function delete($data){
+		public function delete($data){
 			for($i=0; $i<sizeof($data); $i++){
 				$this->db->where('customer_id',$data[$i]);
 				$this->db->delete($this->table);
@@ -44,7 +44,7 @@
 			return true;
 		}
 
-		function fetch($query_array, $limit, $start){
+		public function fetch($query_array, $limit, $start){
 
 			if(strlen($query_array['name'])){
 				$this->db->like('name', $query_array['name']);
@@ -65,14 +65,14 @@
 			return $ret;
 		}
 
-		function getCustomers($customer_type){ //feed typeahead with customer data
+		public function getCustomers($customer_type){ //feed typeahead with customer data
 			$this->db->where('customer_type', $customer_type);
 			$query = $this->db->get($this->table);
 			
 			return $query->result();
 		}
 
-		function searchCustomer($data){ //get customer_id. used to set hidden field value after typeahead
+		public function searchCustomer($data){ //get customer_id. used to set hidden field value after typeahead
 			$this->db->select('customer_id,complete_address');
 			$this->db->where('name',$data);
 
@@ -82,12 +82,12 @@
 			}
 		}
 
-		/*function recordCount(){
+		/*public function recordCount(){
 
 			return $this->db->count_all($this->table);
 		}
 
-		function fetchUnit($limit, $start){
+		public function fetchUnit($limit, $start){
 			$sql = 'SELECT * FROM customer ORDER BY customer_id DESC LIMIT ?,?';
 
 			$query = $this->db->query($sql,array(intval($limit),intval($start)));

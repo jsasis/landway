@@ -5,7 +5,7 @@ class Dashboard extends CI_Controller {
 		parent::__construct();
 		
 		if(!$this->session->userdata('logged_in')){
-			redirect('user');
+			return redirect('user');
 		}
 	}
 
@@ -25,9 +25,9 @@ class Dashboard extends CI_Controller {
 
 		$data['posts']					= $this->post_model->findAll();
 
-		// $this->load->view('dashboard', $data);
+		// return $this->load->view('dashboard', $data);
 
-		$this->load->view('admin_lte', $data);
+		return $this->load->view('admin_lte', $data);
 	}
 }
 ?>

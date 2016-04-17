@@ -5,11 +5,11 @@
 
 		private $table = 'user_account';
 
-		function __construct(){
+		public function __construct(){
 			parent::__construct();
 		}
 
-		function login($username, $password){
+		public function login($username, $password){
 			$this->db->select('user_id, first_name, last_name, username, password, user_type');
 			$this->db->from('user_account');
 			$this->db->where('username', $username);
@@ -28,7 +28,7 @@
 			}
 		}
 
-		function create($data){
+		public function create($data){
 			if($this->db->insert($this->table, $data)){
 				return TRUE;
 			}else{
@@ -36,7 +36,7 @@
 			}
 		}
 
-		function saveUpdate($data){
+		public function saveUpdate($data){
 			$this->db->where('user_id', $data['user_id']);
 
 			$query = $this->db->update($this->table, $data['user_data']);
@@ -48,7 +48,7 @@
 			}
 		}
 
-		function check_password($username, $password){
+		public function check_password($username, $password){
 			$sql = "SELECT * FROM user_account WHERE username = ? AND password  = ? LIMIT 1";
 			$query = $this->db->query($sql, array($username, $password));
 
@@ -59,7 +59,7 @@
 			}
 		}
 
-		function update($data){
+		public function update($data){
 			$this->db->where('username', $data['username']);
 			$this->db->where('password', $data['old_password']);
 
@@ -72,7 +72,7 @@
 			}
 		}
 
-		function delete($data){
+		public function delete($data){
 			for($i=0; $i<sizeof($data); $i++){
 				$this->db->where('user_id',$data[$i]);
 				$this->db->delete($this->table);
@@ -80,7 +80,7 @@
 			return true;
 		}
 
-		function getDetails($user_id){
+		public function getDetails($user_id){
 			$this->db->where('user_id', $user_id);
 			$query = $this->db->get($this->table);
 			if($query){
@@ -90,7 +90,7 @@
 			}
 		}
 
-		function fetch($query_array, $limit, $start){
+		public function fetch($query_array, $limit, $start){
 
 			if(strlen($query_array['key'])){
 				$this->db->like('first_name', $query_array['key']);
