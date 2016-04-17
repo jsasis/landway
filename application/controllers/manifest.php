@@ -2,7 +2,7 @@
 if(!defined('BASEPATH')) exit('No direct script access allowed');
 class Manifest extends CI_Controller {
 
-	function __construct() {
+	public function __construct() {
 		parent::__construct();
 
 		if(!$this->session->userdata('logged_in')){
@@ -23,19 +23,19 @@ class Manifest extends CI_Controller {
 		$this->load->model($models);
 	}
 
-	function index(){
+	public function index(){
 
 		$this->listManifest();
 	}
 
-	function show(){
+	public function show(){
 		$this->load->model('truck_model');
 		$data['trucks'] = $this->truck_model->getTrucks();
 
 		$this->load->view('manifest/manifest', $data);
 	}
 
-	function listManifest($query_id = 0){
+	public function listManifest($query_id = 0){
 		$this->noCache();
 		$this->input->load_query($query_id);
 		$query_array = array(
@@ -80,7 +80,7 @@ class Manifest extends CI_Controller {
 		$this->load->view('manifest/list', $data);
 	}
 
-	function search(){
+	public function search(){
 		$query_array = array(
 			'search_key' => $this->input->post('search_key')
 			);
@@ -89,7 +89,7 @@ class Manifest extends CI_Controller {
 		redirect("manifest/listManifest/$query_id");
 	}
 
-	function getDetails(){
+	public function getDetails(){
 		$this->noCache();
 		$manifest_number = $this->uri->segment(3);
 		if(!$manifest_number) redirect("error/error_404");
@@ -122,7 +122,7 @@ class Manifest extends CI_Controller {
 		}
 	}
 
-	function getWaybillCollection(){
+	public function getWaybillCollection(){
 		$waybill_number = $this->input->post('waybill_number');
 
 		$data['manifest_details']	= $this->manifest_model->getManifest($manifest_number);	
@@ -133,7 +133,7 @@ class Manifest extends CI_Controller {
 		$this->load->view('manifest/manifest_collections', $data);
 	}
 
-	function typeAhead(){
+	public function typeAhead(){
 		$manifest_number = $this->uri->segment(3);
 		if($this->manifest_model->getWaybillCollection($manifest_number)){
 			$result['success'] = true;
@@ -148,7 +148,7 @@ class Manifest extends CI_Controller {
 		print_r($json);
 	}
 
-	function load(){
+	public function load(){
 		$manifest_number= $this->uri->segment(3);
 		$post_data		= $this->input->post('checkbox');
 		$waybills		= $this->manifest_model->getManifestWaybills($manifest_number);
@@ -179,7 +179,7 @@ class Manifest extends CI_Controller {
 		echo json_encode($result);
 	}
 
-	function unload(){
+	public function unload(){
 		$waybill_number  = $this->input->post('waybill_number');
 		$manifest_number = $this->input->post('manifest_number');
 
@@ -189,7 +189,7 @@ class Manifest extends CI_Controller {
 		}
 	}
 
-	function save(){
+	public function save(){
 		$this->load->model('manifest_model');
 
 		$this->form_validation->set_rules('truck', 'Truck', 'required');
@@ -228,7 +228,7 @@ class Manifest extends CI_Controller {
 		echo json_encode($result);
 	}
 
-	function update(){
+	public function update(){
 		$manifest_number = $this->uri->segment(3);
 		if(!$manifest_number) redirect("error/error_404");
 
@@ -270,14 +270,14 @@ class Manifest extends CI_Controller {
 		$this->load->view('manifest/update_manifest', $data);
 	}
 
-	function clear(){
+	public function clear(){
 		$params = $this->uri->segment(3);
 		if($this->manifest_model->clear($params)){
 			redirect('manifest/update/'.$params);
 		}
 	}
 
-	function delete(){
+	public function delete(){
 		$session_data = $this->session->userdata('logged_in');
 		if($session_data['role'] != 'admin') {
 			$this->session->set_flashdata('warning', 'You are not allowed to delete.');
@@ -299,7 +299,7 @@ class Manifest extends CI_Controller {
 	}
 
 
-		// function delete(){
+		// public function delete(){
 		// 	$data 	= $this->input->post('checkbox');
 		// 	$delete = $this->manifest_model->delete($data);
 
@@ -313,7 +313,7 @@ class Manifest extends CI_Controller {
 		// 	echo json_encode($result);
 		// }
 
-	function printManifest(){
+	public function printManifest(){
 		$manifest_number 			= $this->uri->segment(3);
 		$data['manifest_details']	= $this->manifest_model->getManifest($manifest_number);
 		$data['manifest_waybills']	= $this->manifest_model->getManifestWaybills($manifest_number, FALSE);
@@ -322,7 +322,7 @@ class Manifest extends CI_Controller {
 		$this->load->view('manifest/manifest_print', $data);
 	}
 
-	function printManifestCollections(){
+	public function printManifestCollections(){
 		$manifest_number 			= $this->uri->segment(3);
 
 		$data['manifest_details']	= $this->manifest_model->getManifest($manifest_number);
@@ -333,7 +333,7 @@ class Manifest extends CI_Controller {
 		$this->load->view('manifest/manifest_collections_print', $data);
 	}
 
-	function export(){
+	public function export(){
 		$manifest_number = $this->uri->segment(3);
 		$query = $this->manifest_model->getManifestWaybills($manifest_number, FALSE);
 
@@ -379,7 +379,7 @@ class Manifest extends CI_Controller {
 			$objWriter->save('php://output');
 		}
 
-		function exportCollections(){
+		public function exportCollections(){
 			$manifest_number = $this->uri->segment(3);
 			$query = $this->manifest_model->getManifestWaybills($manifest_number, TRUE);
 

@@ -1,16 +1,16 @@
 <?php if(!defined('BASEPATH')) exit('No direct script access allowed');
 
 class Post extends CI_Controller {
-	function __construct() {
+	public function __construct() {
 		parent::__construct();
 		$this->load->model('post_model');
 	}
 
-	function index() {
+	public function index() {
 		$this->show();
 	}
 
-	function show(){
+	public function show(){
 		$this->load->library('pagination');
 		
 		$config = array();
@@ -45,7 +45,7 @@ class Post extends CI_Controller {
 		$this->load->view('post/post', $data);
 	}
 
-	function save() {
+	public function save() {
 		$this->load->model('post_model');
 		$this->load->library('form_validation');
 
@@ -92,7 +92,7 @@ class Post extends CI_Controller {
 		echo json_encode($result);
 	}
 
-	function delete() {
+	public function delete() {
 		$post_id = $this->uri->segment(3);
 
 		if($this->post_model->delete($post_id))
@@ -101,7 +101,7 @@ class Post extends CI_Controller {
 		}
 	}
 
-	function edit() {
+	public function edit() {
 		$id = $this->uri->segment(3);
 
 		$posts = $this->post_model->findById($id);

@@ -2,7 +2,7 @@
 	if(!defined('BASEPATH')) exit('No direct script access allowed');
 
 	class Unit extends CI_Controller{
-		function __construct(){
+		public function __construct(){
 			parent::__construct();
 
 			if(!$this->session->userdata('logged_in')){
@@ -13,11 +13,11 @@
 			$this->load->model('unit_model');
 		}
 
-		function index(){
+		public function index(){
 			$this->showUnits();
 		}
 
-		function showUnits(){
+		public function showUnits(){
 			$config = array();
 			$config['base_url'] = base_url().'unit/showUnits';
 			$config['total_rows'] = $this->unit_model->recordCount();
@@ -54,12 +54,12 @@
 			$this->load->view('unit',$data);*/
 		}
 
-		function addUnit(){
+		public function addUnit(){
 			
 			$this->load->view('unit/add_unit');
 		}
 
-		function getSubItems(){
+		public function getSubItems(){
 			$this->load->model("unit_category_model");
 			$unit_id = $this->uri->segment(3);
 
@@ -74,7 +74,7 @@
 			}
 		}
 
-		function save(){
+		public function save(){
 			$this->load->library('form_validation');
 
 			$this->form_validation->set_rules('unit_code','Unit Code','required|trim');
@@ -110,7 +110,7 @@
 			echo json_encode($result);
 		}
 
-		function delete(){
+		public function delete(){
 			$data = $this->input->post('checkbox');
 
 			if($this->unit_model->deleteAll($data)){
@@ -118,7 +118,7 @@
 			}
 		}
 
-		function updateUnit(){
+		public function updateUnit(){
 			
 			$unitID = $this->uri->segment(3);
 
@@ -129,7 +129,7 @@
 			}
 		}
 
-		function search(){
+		public function search(){
 			if($this->unit_model->search()){
 				$result['result'] = $this->unit_model->search();
 				$this->load->view('unit/unit_ajax', $result);
@@ -140,7 +140,7 @@
 			}
 		}
 
-		function showUnits1(){
+		public function showUnits1(){
 			/*
 			$config = array();
 			$config['base_url'] = base_url().'unit/showUnits';
@@ -162,7 +162,7 @@
 			$this->load->view('unit',$data);*/
 		}
 
-		function isLoggedIn(){
+		public function isLoggedIn(){
 			if($this->session->userdata('logged_in')){
 				return true;
 			}else{

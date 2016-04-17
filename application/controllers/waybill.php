@@ -1,7 +1,7 @@
 <?php if(!defined('BASEPATH')) exit('No direct script access allowed');
 	class Waybill extends CI_Controller {
 
-		function __construct() {
+		public function __construct() {
 			parent::__construct();
 
 			if(!$this->session->userdata('logged_in')){
@@ -21,16 +21,16 @@
 			$this->load->model($models);	
 		}
 
-		function index(){
+		public function index(){
 			$this->show();
 		}
 
-		function insertSampleData(){
+		public function insertSampleData(){
 
 			$this->waybill_model->insertSampleData();
 		}
 
-		function show($query_id = 0){
+		public function show($query_id = 0){
 			$this->noCache();
 			$this->input->load_query($query_id);
 			$query_array = array(
@@ -72,7 +72,7 @@
 			$this->load->view('waybill/waybill', $data);
 		}
 
-		function search(){
+		public function search(){
 			$query_array = array(
 				'search_key' => $this->input->post('search_key')
 			);
@@ -81,7 +81,7 @@
 			redirect("waybill/show/$query_id");
 		}
 
-		function save(){
+		public function save(){
 			$truck_id = $this->input->post('truck');
 			$shipment_date = $this->input->post('shipment_date');
 
@@ -140,7 +140,7 @@
 			echo json_encode($result);
 		}
 
-		function validate(){
+		public function validate(){
 			$this->load->library('form_validation');
 			//customer info
 			$this->form_validation->set_rules('ce_id','ce_id','required');
@@ -169,19 +169,19 @@
 			}
 		}
 
-		function add(){
+		public function add(){
 			$this->load->model('truck_model');
 			//$data['result'] = $this->unit_category_model->read();
 			$data['trucks'] = $this->truck_model->getTrucks();
 			$this->load->view('waybill/waybill_new', $data);
 		}
 
-		function update(){
+		public function update(){
 			$update = TRUE;
 			$this->getDetails($update);
 		}
 
-		function delete(){
+		public function delete(){
 			$session_data = $this->session->userdata('logged_in');
 			if($session_data['role'] != 'admin') {
 				$this->session->set_flashdata('warning', 'You are not allowed to delete.');
@@ -195,7 +195,7 @@
 			}
 		}
 
-		function getUncollected(){
+		public function getUncollected(){
 			$this->noCache();
 
 			$config = array();
@@ -232,7 +232,7 @@
 			($data['result'] >= 0) ? $this->load->view('waybill/waybill_uncollected', $data) : redirect('error/db_error');
 		}
 
-		function getPrepaid(){
+		public function getPrepaid(){
 			$this->noCache();
 
 			$config = array();
@@ -269,7 +269,7 @@
 			($data['result'] >= 0) ? $this->load->view('waybill/waybill_prepaid', $data) : redirect('error/db_error');
 		}
 
-		function getBackload(){
+		public function getBackload(){
 			$this->noCache();
 
 			$config = array();
@@ -306,7 +306,7 @@
 			($data['result'] >= 0) ? $this->load->view('waybill/waybill_backload', $data) : redirect('error/db_error');
 		}
 
-		function computePrepaid() {
+		public function computePrepaid() {
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('start_date', 'Start Date', 'required');
 			$this->form_validation->set_rules('end_date', 'End Date', 'required');
@@ -336,7 +336,7 @@
 			echo json_encode($result);
 		}	
 
-		function printWaybill($waybill_number){
+		public function printWaybill($waybill_number){
 			$data['rows'] 			= $this->waybill_model->getDetails($waybill_number, FALSE, FALSE);
 			$data['resultItems'] 	= $this->waybill_model->getItems($waybill_number, FALSE);
 
@@ -351,7 +351,7 @@
 			}
 		}
 
-		function printByBatch(){
+		public function printByBatch(){
 			$waybill_number = $this->input->post('checkbox');
 
 			$data['rows'] 			= $this->waybill_model->getDetails($waybill_number, TRUE, FALSE);
@@ -364,7 +364,7 @@
 			}
 		}
 
-		function printUncollected(){
+		public function printUncollected(){
 			$data['result']	= $this->waybill_model->getUncollected(1, 0);
 
 			if(!empty($data['result'])){
@@ -374,7 +374,7 @@
 			}
 		}
 
-		function getDetails($update){
+		public function getDetails($update){
 			(!$this->uri->segment(3)) ? show_404() : $waybill_number = $this->uri->segment(3);
 
 			$data['row'] 			= $this->waybill_model->getDetails($waybill_number, NULL, TRUE);
@@ -396,7 +396,7 @@
 			}
 		}
 
-		function typeAhead(){
+		public function typeAhead(){
 			if($this->waybill_model->getUnloadedTypeAhead()){
 				$result['success'] = TRUE;
 				$result['result'] = $this->waybill_model->getUnloadedTypeAhead();
@@ -410,7 +410,7 @@
 			print_r($json);
 		}
 
-		function updateDeliveryStatus(){
+		public function updateDeliveryStatus(){
 			$data = array(
 				'waybill_number'	=> $this->input->post('waybill_number'),
 				'delivery_status' 	=> $this->input->post('delivery_status'),

@@ -3,7 +3,7 @@ if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 class Customer extends CI_Controller {
 
-	function __construct(){
+	public function __construct(){
 		parent::__construct();
 
 		if(!$this->session->userdata('logged_in')){
@@ -14,12 +14,12 @@ class Customer extends CI_Controller {
 		$this->load->library('pagination');
 	}
 	
-	function index() {
+	public function index() {
 		
 		$this->show();
 	}
 
-	function show($query_id = 0){
+	public function show($query_id = 0){
 		$this->input->load_query($query_id);
 
 		$query_array = array(
@@ -60,7 +60,7 @@ class Customer extends CI_Controller {
 		$this->load->view('customer/customer', $data);
 	}
 
-	function searchCustomer(){
+	public function searchCustomer(){
 		$query_array = array(
 			'name' => $this->input->post('name')
 		);
@@ -70,11 +70,11 @@ class Customer extends CI_Controller {
 		redirect("customer/show/$query_id");
 	}
 
-	function add(){
+	public function add(){
 		$this->load->view('customer/customer_new');
 	}
 
-	function update(){
+	public function update(){
 		$customerID = $this->uri->segment(3);
 
 		if($result['result'] = $this->customer_model->read($customerID)){
@@ -82,7 +82,7 @@ class Customer extends CI_Controller {
 		}
 	}
 
-	function delete(){
+	public function delete(){
 		$data = $this->input->post('checkbox');
 
 		if($this->customer_model->delete($data)){
@@ -90,7 +90,7 @@ class Customer extends CI_Controller {
 		}
 	}
 
-	function save(){
+	public function save(){
 		$this->load->library('form_validation');
 
 		$this->form_validation->set_rules('customer_name','Customer Name','required|trim|xss_clean');
@@ -123,7 +123,7 @@ class Customer extends CI_Controller {
 		echo json_encode($result);
 	}
 
-	function typeAhead(){
+	public function typeAhead(){
 		$customer_type = $this->uri->segment(3);
 
 		if($this->customer_model->getCustomers($customer_type)){
@@ -138,7 +138,7 @@ class Customer extends CI_Controller {
 		print_r($json);
 	}
 
-	function search(){
+	public function search(){
 		$data = $this->input->post('customer');
 
 		$result['success'] = true;

@@ -2,7 +2,7 @@
 
 	class Unit_Category extends CI_Controller{
 
-		function __construct(){
+		public function __construct(){
 			parent::__construct();
 			
 			if(!$this->session->userdata('logged_in')){
@@ -13,11 +13,11 @@
 			$this->load->model('unit_category_model');
 		}
 
-		function index(){
+		public function index(){
 			$this->show();
 		}
 
-		function show(){
+		public function show(){
 			$config = array();
 			$config['base_url'] = base_url()."unit_category/show";
 			$config['total_rows'] = $this->unit_category_model->recordCount();
@@ -50,7 +50,7 @@
 			$this->load->view('unit_category/unit_category', $data);
 		}
 
-		function save() {
+		public function save() {
 			$this->load->library('form_validation');
 
 			if(!empty($this->input->post('unit_category_id'))){
@@ -93,12 +93,12 @@
 			echo json_encode($result);
 		}
 
-		function add(){
+		public function add(){
 			$data['unit'] = $this->getUnits();
 			$this->load->view('unit_category/add_unit_category',$data);
 		}
 
-		function update(){
+		public function update(){
 			$unitID = $this->uri->segment(3);
 			$result['unit'] = $this->getUnits();
 
@@ -107,7 +107,7 @@
 			}
 		}
 
-		function delete(){
+		public function delete(){
 			$data = $this->input->post('checkbox');
 
 			if($this->unit_category_model->deleteAll($data)){
@@ -119,13 +119,13 @@
 			echo json_encode($result);
 		}
 
-		function getUnits(){
+		public function getUnits(){
 			$this->load->model('unit_model');
 		
 			return $data['unit'] = $this->unit_model->read();
 		}
 
-		function getItemPrice(){
+		public function getItemPrice(){
 			if($this->unit_category_model->getItemPrice()){
 				$result['success'] = true;
 				$result['result'] = $this->unit_category_model->getItemPrice();
@@ -134,7 +134,7 @@
 			//print_r($result);
 		}
 
-		function getItems(){
+		public function getItems(){
 			if($this->unit_category_model->getItems()){
 				$result = $this->unit_category_model->getItems();
 			}

@@ -2,18 +2,18 @@
 session_start();
 class User extends CI_Controller{
 	
-	function __construct(){
+	public function __construct(){
 		parent::__construct();
 		$this->load->model('user_model');
 		$this->load->library('form_validation');
 		$this->load->library('pagination');
 	}
 
-	function index(){
+	public function index(){
 		$this->load->view('login');
 	}
 
-	function show($query_id = 0){
+	public function show($query_id = 0){
 		$this->input->load_query($query_id);
 
 		$query_array = array(
@@ -51,7 +51,7 @@ class User extends CI_Controller{
 		$this->load->view('user/user', $data);
 	}
 
-	function search(){
+	public function search(){
 		$query_array = array(
 			'key' => $this->input->post('key')
 		);
@@ -61,11 +61,11 @@ class User extends CI_Controller{
 		redirect("user/show/$query_id");
 	}
 
-	function add(){
+	public function add(){
 		$this->load->view('user/user_new');
 	}
 
-	function delete(){
+	public function delete(){
 		$data = $this->input->post('checkbox');
 
 		if($this->user_model->delete($data)){
@@ -74,7 +74,7 @@ class User extends CI_Controller{
 		}
 	}
 
-	function save(){
+	public function save(){
 		$this->form_validation->set_rules('first_name', 'First Name', 'trim|required|alpha');
 		$this->form_validation->set_rules('last_name', 'Last Name', 'trim|required|alpha');
 		$this->form_validation->set_rules('username', 'Username', 'trim|required|is_unique[user_account.username]');
@@ -114,7 +114,7 @@ class User extends CI_Controller{
 		echo json_encode($result);
 	}
 
-	function saveUpdate(){
+	public function saveUpdate(){
 		$this->form_validation->set_rules('first_name',	'First Name', 	'trim|required|alpha');
 		$this->form_validation->set_rules('last_name', 	'Last Name', 	'trim|required|alpha');
 		$this->form_validation->set_rules('user_type', 	'User Type', 	'trim|required');
@@ -147,12 +147,12 @@ class User extends CI_Controller{
 		echo json_encode($result);
 	}
 
-	function changePassword(){
+	public function changePassword(){
 
 		$this->load->view('user/change_password');
 	}
 
-	function update(){
+	public function update(){
 		$username = $this->session->userdata('logged_in')['username'];
 
 		$this->form_validation->set_rules('old_password', 'Old Password', 		  	'trim|required|md5|callback_check_password');
@@ -181,7 +181,7 @@ class User extends CI_Controller{
 		echo json_encode($result);
 	}
 
-	function updateUser(){
+	public function updateUser(){
 		$user_id = $this->uri->segment(3);
 
 		$data['result'] = $this->user_model->getDetails($user_id);
@@ -189,7 +189,7 @@ class User extends CI_Controller{
 		$this->load->view('user/user_update', $data);
 	}
 
-	function getDetails($update){
+	public function getDetails($update){
 		$user_id = $this->uri->segment(3);
 
 		$data['row'] 			= $this->waybill_model->getDetails($user_id);
@@ -209,7 +209,7 @@ class User extends CI_Controller{
 		}
 	}
 
-	function login(){
+	public function login(){
 		$this->form_validation->set_rules('username', 'Username', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean|callback_check_database');
 
@@ -221,7 +221,7 @@ class User extends CI_Controller{
 		}
 	}
 
-	function logout(){
+	public function logout(){
 		$this->load->model('query_model');
 		
 		if($this->query_model->deleteAll()) { // delete search keys from ci_query table, we don't need this
@@ -235,7 +235,7 @@ class User extends CI_Controller{
 	   redirect('user', 'refresh');
 	}
 
-	function check_database($password){
+	public function check_database($password){
 		$username = $this->input->post('username');
 		$result = $this->user_model->login($username, $password);
 
@@ -258,7 +258,7 @@ class User extends CI_Controller{
 		}
 	}
 
-	function check_password($password){
+	public function check_password($password){
 		$username = $this->session->userdata('logged_in')['username'];
 		$result = $this->user_model->check_password($username, $password);
 

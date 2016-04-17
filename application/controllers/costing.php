@@ -2,7 +2,7 @@
 
 	class Costing extends CI_Controller{
 
-		function __construct(){
+		public function __construct(){
 			parent::__construct();
 			
 			if(!$this->session->userdata('logged_in')){
@@ -14,11 +14,11 @@
 			$this->load->model('costing_model');
 		}
 
-		/*function index(){
+		/*public function index(){
 			$this->show();
 		}*/
 
-		/*function show(){
+		/*public function show(){
 			$config = array();
 			$config['base_url'] = base_url()."unit_category/show";
 			$config['total_rows'] = $this->unit_category_model->recordCount();
@@ -51,7 +51,7 @@
 			$this->load->view('unit_category/unit_category', $data);
 		}*/
 
-		function save(){
+		public function save(){
 			$this->form_validation->set_rules('cost','New Price','required|trim');
 
 			if($this->form_validation->run()){

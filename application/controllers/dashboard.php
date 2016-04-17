@@ -1,7 +1,7 @@
 <?php if(!defined('BASEPATH')) exit('No direct script access allowed');
 
 class Dashboard extends CI_Controller {
-	function __construct() {
+	public function __construct() {
 		parent::__construct();
 		
 		if(!$this->session->userdata('logged_in')){
@@ -9,7 +9,7 @@ class Dashboard extends CI_Controller {
 		}
 	}
 
-	function index() {
+	public function index() {
 		$this->load->model('waybill_model');
 		$this->load->model('unit_category_model');
 		$this->load->model('post_model');

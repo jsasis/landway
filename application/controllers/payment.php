@@ -2,7 +2,7 @@
 
 	class Payment extends CI_Controller {
 
-		function __construct() {
+		public function __construct() {
 			parent::__construct();
 
 			if(!$this->session->userdata('logged_in')){
@@ -21,11 +21,11 @@
 			$this->load->model($models);
 		}	
 
-		function index(){
+		public function index(){
 			$this->show();
 		}
 
-		function show(){
+		public function show(){
 			$this->noCache();
 
 			$config = array();
@@ -61,7 +61,7 @@
 			$this->load->view('payment/payment', $data);
 		}
 
-		function save(){
+		public function save(){
 			$this->load->model('payment_model');
 			$this->load->library('form_validation');
 
@@ -92,13 +92,13 @@
 			echo json_encode($result);
 		}
 
-		function add(){
+		public function add(){
 			$this->load->model('waybill_model');
 			$data['waybill_numbers'] = $this->waybill_model->getWaybill();
 			$this->load->view('payment/payment_new', $data);
 		}
 
-		function delete(){
+		public function delete(){
 			$data = $this->input->post('checkbox');
 			if($this->payment_model->delete($data)){
 				$this->session->set_flashdata('notification','Record has been deleted.');

@@ -3,7 +3,7 @@ if(!defined('BASEPATH')) exit('No direct script access allowed');
 
 class Truck extends CI_Controller{
 
-	function __construct(){
+	public function __construct(){
 
 		parent::__construct();
 
@@ -19,11 +19,11 @@ class Truck extends CI_Controller{
 		$this->load->model('truck_model');
 	}
 
-	function index(){		
+	public function index(){		
 		$this->show();
 	}
 
-	function show(){
+	public function show(){
 		$config = array();
 		$config['base_url'] = base_url().'truck/show';
 		$config['total_rows'] = $this->truck_model->recordCount();
@@ -56,11 +56,11 @@ class Truck extends CI_Controller{
 		$this->load->view('truck/truck', $data);
 	}
 
-	function add(){
+	public function add(){
 		$this->load->view('truck/add_truck');
 	}
 
-	function save(){
+	public function save(){
 		$this->load->library('form_validation');
 
 		$this->form_validation->set_rules('make','Make','required');
@@ -99,7 +99,7 @@ class Truck extends CI_Controller{
 		echo json_encode($result);
 	}
 
-	function delete(){
+	public function delete(){
 		$data = $this->input->post('checkbox');
 
 		if($this->truck_model->delete($data)){
@@ -107,7 +107,7 @@ class Truck extends CI_Controller{
 		}
 	}
 
-	function update(){
+	public function update(){
 		$truck_id = $this->uri->segment(3);
 
 		$this->load->model('manifest_model');
@@ -154,7 +154,7 @@ class Truck extends CI_Controller{
 		}
 	}
 
-	function search(){
+	public function search(){
 		if($this->truck_model->search()){
 			$result['result'] = $this->truck_model->search();
 			$this->load->view('truck/truck_ajax', $result);
@@ -165,7 +165,7 @@ class Truck extends CI_Controller{
 		}
 	}
 
-	function create_report() {
+	public function create_report() {
 		$typeOfReport = $this->uri->segment(3);
 
 		if($typeOfReport) {
@@ -180,7 +180,7 @@ class Truck extends CI_Controller{
 		}
 	}
 
-	function generate_report() {
+	public function generate_report() {
 		$this->load->library('form_validation');
 
 		$this->form_validation->set_rules('report_type','Report Type', 'required');
@@ -259,7 +259,7 @@ class Truck extends CI_Controller{
 		echo json_encode($result);
 	}
 
-	function generate_report_annual() {
+	public function generate_report_annual() {
 		$this->load->library('form_validation');
 
 		$this->form_validation->set_rules('year','Truck','required');
