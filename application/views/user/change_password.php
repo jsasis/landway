@@ -19,7 +19,7 @@
 											<?php echo form_open('', array('id'=>'myForm'));?>
 											<div class='form-group' id='old_password'>
 												<?php echo form_label('Old Password','', array('class'=>'control-label'));?>
-												<?php echo form_input(array('id'=>'old_password', 'name'=>'old_password', 'class'=>'form-control', 'placeholder'=>'Old Password', 'autocomplete'=>'off'));?>
+												<?php echo form_input(array('type'=>'password','id'=>'old_password', 'name'=>'old_password', 'class'=>'form-control', 'placeholder'=>'Old Password', 'autocomplete'=>'off'));?>
 												<span class='error-message control-label'></span>
 											</div>
 											<div class='form-group' id='new_password'>
@@ -33,7 +33,7 @@
 												<span class='error-message control-label'></span>
 											</div>
 											<div class='form-group pull-right'>
-												<a href='<?php echo base_url();?>user' class='btn btn-default'>Cancel</a>
+												<a href='<?php echo base_url();?>user/show' class='btn btn-default'>Cancel</a>
 												<button type='submit' class='btn btn-success'><i class='fa fa-edit'></i> Change Password</button>
 											</div>
 											<?php echo form_close();?>

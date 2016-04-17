@@ -12,11 +12,23 @@
 							<div class='row'>
 								<div class='col-md-4 details'>
 									<h2>Waybill # <strong><?php echo $row['waybill_number'];?></strong></h2>
-									<p><i><?php echo date('l, F d, Y H:i A',strtotime($row['transaction_date']));?></i></p>
-									<h4><?php echo $row['status'];?> <small><?php echo $row['truck']; ?></small></h4>
-									<p class="backload"><?php if($row['is_backload']) { echo "<label class='label label-info'>Backload</label>"; }?></p>
+									<div class="meta">
+										<p><i><?php echo date('l, F d, Y H:i A',strtotime($row['transaction_date']));?></i></p>
+										<?php if($row['status'] == "Loaded") :?>
+										<p><?php echo $row['status'];?> to <?php echo $row['truck']; ?></p>
+										<?php endif ;?>
+										<p class="backload"><?php if($row['is_backload']) { echo "<label class='label label-info'>Backload</label>"; }?></p>
+									</div>
+									<?php if($row['status'] != "Received"): ?>
+									<?php $delivery_status = $row['delivery_status'];?>
+									<?php if($delivery_status == "Undelivered") :?>
+									<h4><i class="fa fa-exclamation-triangle text-danger"></i> Undelivered</>
+									<?php else: ?>
+									<h4><i class="fa fa-check-circle text-success"></i> Delivered</h4>
+									<?php endif; ?>
+									<?php endif; ?>
 									<?php $balance = intval($row['total']) - intval($amountPaid->amount);?>
-									<h2><strong><?php echo number_format($balance, 2, '.', ',');?></strong></h2>
+									<h3>Balance <strong><?php echo number_format($balance, 2, '.', ',');?></strong></h3>
 								</div>
 								<div class='col-md-4 details'>
 									<div class='text-left'>

@@ -32,7 +32,8 @@
 			foreach($data['waybills'] as $row){
 				$insert_waybills[] 			= array(
 					'manifest_number'	=> $data['manifest_number'],
-					'waybill_number' 	=> $row
+					'waybill_number' 	=> $row,
+					'delivery_status'	=> 'Undelivered',
 				);
 
 				$update_waybills[] 		= array(
@@ -76,10 +77,41 @@
 			}
 		}
 
-		function delete($data){
-			for($i=0; $i<sizeof($data); $i++){
-				$this->db->where('manifest_number', $data[$i]);
+		function delete($manifest_number){
+			if($this->clearedToDelete($manifest_number)){
+				$this->db->where('manifest_number', $manifest_number);
 				$this->db->delete($this->table);
+				
+				return TRUE;
+			} else {
+				return FALSE;
+			}
+		}
+
+		// function delete($data){
+		// 	for($i=0; $i<sizeof($data); $i++){
+		// 		if($this->clearedToDelete($data[$i])){
+		// 			$this->db->where('manifest_number', $data[$i]);
+		// 			$this->db->delete($this->table);
+		// 		} else {
+		// 			return false;
+		// 		}
+		// 	}
+		// }
+
+		function clearedToDelete($manifest_number){
+			$sql = "SELECT COUNT(*) as count FROM waybill
+					JOIN manifest_waybill
+					ON manifest_waybill.waybill_number = waybill.waybill_number
+					WHERE manifest_waybill.manifest_number = ?
+					AND manifest_waybill.delivery_status = 'undelivered' ";
+			$query = $this->db->query($sql, array($manifest_number));
+			$result = $query->row();
+
+			if($result->count > 0 ) {
+				return FALSE;
+			} else {
+				return TRUE;
 			}
 		}
 		
@@ -207,7 +239,7 @@
                         ORDER BY mw.waybill_number DESC";
 
 			} else {
-				$sql = "SELECT w.waybill_number, c1.name as consignee,c2.name as consignor
+				$sql = "SELECT w.waybill_number, c1.name as consignee,c2.name as consignor, delivery_status
 						FROM waybill w
 						JOIN customer c1 ON c1.customer_id = w.consignee
 						JOIN customer c2 ON c2.customer_id = w.consignor
@@ -276,5 +308,6 @@
 			return $query->row_array();
 		}
 
+		
 	}
 ?> 

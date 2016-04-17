@@ -11,6 +11,12 @@
 		<section class="content">
 			<div class='row'>
 				<div class='col-md-12'>
+					<?php if($this->session->flashdata('notification')): ?>
+						<div class='alert alert-success'><?php echo $this->session->flashdata('notification');?></div>
+					<?php elseif($this->session->flashdata('warning')): ?>
+						<div class='alert alert-danger'><?php echo $this->session->flashdata('warning');?></div>
+					<?php endif?>
+					<div id="notif"></div>
 					<div class="box box-default">
 						<div class="box-header with-border">
 							<div class="pull-left">
@@ -127,7 +133,6 @@
 		$('#delete').click(function(e){
 			e.preventDefault();
 			var data = $('input#checkbox').serialize();
-
 			if(data == ""){
 				$('.modal-header').html('<h4 class="text-info"><span class="glyphicon glyphicon-info-sign"></span> Alert</h4>');
 				$('.modal-body').html('<p>Please select record/s to be deleted.</p>');
@@ -141,15 +146,21 @@
 
 			$('#yes').click(function(){
 				showloader = true;
+
 				$.ajax({
 					type: 'post',
 					url: '<?php echo base_url();?>manifest/delete',
 					data: data,
+					dataType: 'json',
 					success: function(response){
-						if(response){
+						console.log(response);
+						if(response.success){
 							window.location  = '<?php echo base_url();?>manifest';
-						}else{
-							alert('Delete Error');
+						} else {
+							$("#notif")
+							.addClass("alert alert-danger")
+							.html(response.msg)
+							$("#myModal").modal("hide");
 						}
 					}
 				});

@@ -75,6 +75,7 @@ class Post extends CI_Controller {
 
 			if($save)
 			{
+				$this->session->set_flashdata('notification','Post has been saved.');
 				$result['success'] = TRUE;
 			}
 		} else {

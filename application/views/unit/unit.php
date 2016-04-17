@@ -30,18 +30,6 @@
 									<div class="clearfix"></div>
 								</div>
 								<div class="box-body">
-									<!-- <nav class="navbar navbar-default control-table" role="navigation">
-									   <div class="container-fluid">
-									      <ul class='nav navbar-nav navbar-left'>
-									         <form class="navbar-form navbar-left" role="search">
-									            
-									         </form>
-									      </ul>
-									      <ul class='nav navbar-nav navbar-right'>
-									         
-									      </ul>
-									   </div>
-									</nav> -->
 									<?php echo form_open('',array('id'=>'myForm'));?>
 									<table id='myTable' class='table table-striped table-hover'>
 										<thead>

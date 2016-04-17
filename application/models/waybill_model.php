@@ -8,7 +8,7 @@
 		}
 		
 		function fetch($query_array, $limit, $start){
-			$this->db->select('w.waybill_number, c1.name as consignee, c2.name as consignor, status, is_backload, notes, total, transaction_date, t.plate_number, m.manifest_number');
+			$this->db->select('w.waybill_number, c1.name as consignee, c2.name as consignor, status, is_backload, notes, total, transaction_date, t.plate_number, mw.delivery_status, m.manifest_number');
 			$this->db->select_sum('p.amount','payment');
 			$this->db->join('customer c1','c1.customer_id = w.consignee');
 			$this->db->join('customer c2','c2.customer_id = w.consignor');
@@ -156,7 +156,7 @@
 
 		function getDetails($waybill_number, $is_by_batch = TRUE, $return_object = FALSE){
 			$this->db->select("waybill.waybill_number,c1.customer_id as consignee_id,c1.name as consignee, waybill.status, t.plate_number as truck, waybill.dr_number, waybill.is_backload, waybill.notes,
-								c1.complete_address as address1,c2.customer_id as consignor_id,c2.name as consignor,c2.complete_address as address2, payment_terms,
+								c1.complete_address as address1,c2.customer_id as consignor_id,c2.name as consignor,c2.complete_address as address2, payment_terms, mw.delivery_status,
 			 					transaction_date, total, CONCAT(ua.first_name,' ', ua.last_name) as processed_by ", FALSE);
 			$this->db->join('customer c1','waybill.consignee = c1.customer_id');
 			$this->db->join('customer c2','waybill.consignor = c2.customer_id');
@@ -485,6 +485,28 @@
 			$status = array('Received'=>'Received');
 
 			return array_rand($status, 1);
+		}
+
+		function updateDeliveryStatus($data){
+			$sql = "UPDATE manifest_waybill SET delivery_status = ? WHERE waybill_number = ? AND manifest_number = ?";
+			$query = $this->db->query($sql, array($data['delivery_status'], $data['waybill_number'], $data['manifest_number']));
+
+			if($query){
+				return TRUE;
+			} else {
+				return FALSE;
+			}
+		}
+
+		function getManifestNumber($waybill_number){
+			$sql = "SELECT manifest_number FROM manifest_waybill WHERE waybill_number = ?";
+			$query = $this->db->query($sql, array($waybill_number));
+
+			if($query->num_rows > 0) {
+				return $query->row()->manifest_number;
+			} else {
+				return FALSE;
+			}
 		}
 
 	}

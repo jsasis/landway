@@ -43,16 +43,22 @@
 				  				        							<th>Waybill #</th>
 				  				        							<th>Consignee</th>
 				  				        							<th>Consignor</th>
+				  				        							<th></th>
 				  				        						</tr>
 				  				        					</thead>
 				  				        					<tbody id='manifest'>
 				  				        						<?php if($manifest_waybills):?>
 				  				        						<?php foreach($manifest_waybills as $row):?>
 				  				        						<tr>
-				  				        							<td><a href='javascript:void(0)' onclick='unload("<?php echo $row->waybill_number;?>")'><i class='fa fa-minus-square text-danger'></i> </a></td>
+				  				        							<td><a href='javascript:void(0)' onclick='unload("<?php echo $row->waybill_number;?>")'><i class='fa fa-minus' data-toggle="tooltip" title="click to unload"></i> </a></td>
 				  				        							<td><?php echo $row->waybill_number;?></td>
 				  				        							<td><?php echo $row->consignee;?></td>
 				  				        							<td><?php echo $row->consignor;?></td>
+				  				        							<?php if($row->delivery_status == "Undelivered"): ?>
+				  				        							<td><i class="fa fa-times-circle fa-lg text-danger"  data-toggle="tooltip" title="<?php echo $row->delivery_status;?>"></i></td>
+					  				        						<?php else: ?>
+					  				        						<td><i class="fa fa-check-circle fa-lg text-success" data-toggle="tooltip" title="<?php echo $row->delivery_status;?>"></i></td>
+					  				        						<?php endif; ?>
 				  				        						</tr>
 				  				        						<?php endforeach;?>
 				  				        						<?php else:?>
@@ -66,7 +72,7 @@
 				  				        		</div>
 				  			        		</div>
 				  			        	</div>
-				  			        	<!-- Unloaded -->
+				  			        	<!-- Received -->
 				  			        	<div class='col-md-6'>
 				  			        		<h3 class='text-left pull'>Received Waybills <small>select an item</small></h3>
 				  			        		<div class='well'>
@@ -159,6 +165,7 @@
 
 <script type='text/javascript'>
 	$(document).ready(function(){
+		$('[data-toggle="tooltip"]').tooltip();
 		$('.sidebar-menu > li').removeClass('active');
 		$('.sidebar-menu > li:nth-child(4)').addClass('active');
 	});

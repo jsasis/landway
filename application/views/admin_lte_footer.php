@@ -55,7 +55,6 @@
 
 		$('#post_title, #post_body').removeClass('has-error');
 		$('#post_title .error-message, #post_body .error-message').empty();
-
 		$.ajax({
 			type: 'post',
 			data: data,
@@ -64,13 +63,13 @@
 			success: function(response) {
 				if(response.success)
 				{
-					alert("Post has been saved.");
 					$("#newPost")[0].reset();
 					$("#addPost").modal("hide");
-					window.setTimeout(1000, function(){
-						window.location = "<?php echo $base_url;?>dashboard";
-					});
-					
+					// window.setTimeout(500, function(){
+					// 	window.location = "<?php echo $base_url;?>dashboard";
+					// });
+					window.location = "<?php echo $base_url;?>dashboard";
+
 				} else {
 					if(response.error.title)
 					{
@@ -84,7 +83,6 @@
 					}
 				}
 			},
-
 		});
 	});
 

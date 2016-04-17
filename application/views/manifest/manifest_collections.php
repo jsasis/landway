@@ -145,7 +145,8 @@
 				      		<input type='hidden' name='payment_terms' value='collect'></input>
 				      	<div class='form-group' id='amount'>
 				      		<?php echo form_label('Enter Amount','', array('class'=>'control-label'));?>
-					      	<?php echo form_input(array('id'=>'amount','name'=>'amount','class'=>'form-control','placeholder'=>'Enter Amount'));?>
+					      	<?php echo form_input(array('id'=>'amount','name'=>'amount','class'=>'form-control', 'value'=> $row->balance));?>
+					      
 				      	</div>
 			      </div>
 			      <div class="modal-footer">
@@ -185,7 +186,7 @@
 	    $(e.currentTarget).find('.modal-title').html('WAYBILL# '+ waybill_number);
 	    $(e.currentTarget).find('#balance').html(numeral(balance).format('0.00'));
 	    $(e.currentTarget).find('input[name="waybill_number"]').val(waybill_number);
-	    $(e.currentTarget).find('input#amount').val(numeral(balance).format('0.00'));
+	    // $(e.currentTarget).find('input#amount').val(numeral(balance).format('0.00'));
 	});
 	$('#paymentForm').submit(function(e){
 		e.preventDefault();

@@ -110,7 +110,7 @@
 			echo json_encode($result);
 		}
 
-		function deleteAll(){
+		function delete(){
 			$data = $this->input->post('checkbox');
 
 			if($this->unit_model->deleteAll($data)){

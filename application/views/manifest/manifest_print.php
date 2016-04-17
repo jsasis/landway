@@ -73,7 +73,7 @@
 						</tr>
 					</tfoot>
 					<tbody>
-						<?php if($manifest_waybills):?>
+						<?php if($manifest_waybills): ?>
 						<?php foreach($manifest_waybills as $row):?>
 							<tr>
 								<?php if($row->waybill_number == 'TOTAL'):?>
@@ -85,7 +85,8 @@
 								<td><?php echo substr($row->consignor,0, 20);?></td>
 								<td class="text-center"><?php echo $row->prepaid;?></td>
 								<td class="text-center"><?php echo $row->collect;?></td>
-								<td><?php echo substr($row->remarks,0, 45);?></td>
+								<td><?php echo $row->remarks; ?></td>
+								<!-- <td><?php //echo substr($row->remarks, 0, 45);?></td> -->
 							</tr>
 						<?php endforeach;?>
 						<?php else:?>
@@ -96,11 +97,11 @@
 					</tbody>
 				</table>
 				<div id="terms">
-					<p>I hereby certify that the above recieved goods covered by the forgoing waybills or delivery
+					<p style="line-height: 1em;">I hereby certify that the above recieved goods covered by the forgoing waybills or delivery
 						to the consignees accoding to the particulars set forth herein and that I am reponsible for all
 						the said goods until I have made complete delivery of the same collected the freight changes plus value
-						of the goods or C.O.D shipments, if any turned over proceed thereof to LANDWAY CARGO SERVICES. |</p>
-					<p>In case of losses, damages or accident or any of the above mentioned items, the trucking will replace
+						of the goods or C.O.D shipments, if any turned over proceed thereof to LANDWAY CARGO SERVICES. |
+						In case of losses, damages or accident or any of the above mentioned items, the trucking will replace
 						or pay the corresponding amount of the said items within 15 days after notification. An additional sum of 25%
 						of the amount TRANSACTION.|</p>
 				</div>

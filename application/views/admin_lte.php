@@ -24,7 +24,7 @@
 					<!-- small box -->
 					<div class="small-box bg-aqua">
 						<div class="inner">
-							<h3><?php echo $count_received;?></h3>
+							<h3><?php echo $count_received ? $count_received : 0; ?></h3>
 							<p>Received</p>
 						</div>
 						<div class="icon">
@@ -37,7 +37,7 @@
 					<!-- small box -->
 					<div class="small-box bg-green">
 						<div class="inner">
-							<h3><?php echo $total_prepaid;?></h3>
+							<h3><?php echo $total_prepaid ? $total_prepaid : 0; ?></h3>
 							<p>Prepaid</p>
 						</div>
 						<div class="icon">
@@ -50,7 +50,7 @@
 					<!-- small box -->
 					<div class="small-box bg-red">
 						<div class="inner">
-							<h3><?php echo $count_uncollected;?></h3>
+							<h3><?php echo $count_uncollected ? $count_uncollected : 0; ?></h3>
 							<p>Uncollected</p>
 						</div>
 						<div class="icon">

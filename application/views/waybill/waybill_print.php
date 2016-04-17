@@ -74,7 +74,7 @@
 								<td></td>
 								<td></td>
 								<td class='text-right'><strong>TOTAL</strong></td>
-								<td id='total' class='text-right'><strong><?php echo number_format($row['total'],'2','.',',');?></strong></td>
+								<td style="position: relative" id='total' class='text-right'><strong><?php echo number_format($row['total'],'2','.',',');?></strong> <p style="position:absolute; bottom: 10px; right: -150px;">prepared by: <?php echo $row['processed_by'];?></p></td>
 							</tr>
 						</tfoot>
 						<tbody>
@@ -99,7 +99,11 @@
 								<?php endif;?>
 							<?php endfor;?>
 						</tbody>
+
 					</table>
+				</div>
+				<div class="col-xs-3">
+					
 				</div>
 			</div>
 			<!-- Terms and Conditions -->

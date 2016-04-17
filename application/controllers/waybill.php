@@ -182,6 +182,12 @@
 		}
 
 		function delete(){
+			$session_data = $this->session->userdata('logged_in');
+			if($session_data['role'] != 'admin') {
+				$this->session->set_flashdata('warning', 'You are not allowed to delete.');
+				return FALSE;
+			}
+
 			$data = $this->input->post('checkbox');
 			if($this->waybill_model->delete($data)){
 				$this->session->set_flashdata('notification','Record has been deleted.');
@@ -402,6 +408,21 @@
 			$json = json_encode($return);
 			
 			print_r($json);
+		}
+
+		function updateDeliveryStatus(){
+			$data = array(
+				'waybill_number'	=> $this->input->post('waybill_number'),
+				'delivery_status' 	=> $this->input->post('delivery_status'),
+				'manifest_number' 	=> $this->waybill_model->getManifestNumber($this->input->post('waybill_number'))
+			);
+
+			if($this->waybill_model->updateDeliveryStatus($data)){
+				$this->session->set_flashdata('notification','Delivery status has been updated.');
+				redirect("waybill");
+			} else {
+				echo "error";
+			}
 		}
 
 		private function noCache(){

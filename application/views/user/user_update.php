@@ -35,7 +35,7 @@
 												<span class='error-message control-label'></span>
 											</div>
 											<div class='form-group pull-right'>
-												<a href='<?php echo base_url();?>user' class='btn btn-default'>Cancel</a>
+												<a href='<?php echo base_url();?>user/show' class='btn btn-default'>Cancel</a>
 												<button type='submit' class='btn btn-success'>Save</button>
 											</div>
 											<?php echo form_close();?>

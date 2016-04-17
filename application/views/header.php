@@ -17,6 +17,7 @@
 
   <!-- Javascript-->
   <script src='<?php echo base_url();?>js/jquery-1.11.1.min.js'></script>
+  <script src='https://code.jquery.com/jquery-1.11.1.min.js'></script>
   <script src='<?php echo base_url();?>js/bootstrap.min.js'></script>
   <script src='<?php echo base_url();?>js/bootstrap-datepicker.js'></script>
   <script src='<?php echo base_url();?>js/typeahead.js'></script>

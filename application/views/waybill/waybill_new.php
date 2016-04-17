@@ -567,7 +567,8 @@
 							$('#amount .error-message').html(result.error.amount);
 						}
 						if(result.error.quantity){
-							$('thead tr th:nth-child(2)').addClass('label-danger');
+							//$('thead tr th:nth-child(2)').addClass('label-danger');
+							itemError();
 						}
 						if(result.error.unit){
 							itemError();

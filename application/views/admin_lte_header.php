@@ -47,7 +47,7 @@
 							<li class="dropdown user user-menu">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 									<img src="<?php echo $base_url;?>img/avatar5.png" class="user-image" alt="User Image"/>
-									<span class="hidden-xs"><?php echo $first_name .' '. $last_name;?></span>
+									<span class="hidden-xs"><?php echo $first_name; ?></span>
 								</a>
 								<ul class="dropdown-menu">
 									<!-- User image -->
@@ -60,7 +60,7 @@
 									<!-- Menu Body -->
 									<li class="user-body">
 										<div class="col-xs-12 text-center">
-											<a href="">Change Password</a>
+											<a href="<?php echo base_url();?>user/changePassword/<?php echo $user_id;?>">Change Password</a>
 										</div>
 									</li>
 									<!-- Menu Footer-->
@@ -89,12 +89,13 @@
 							<img src="<?php echo $base_url;?>img/avatar5.png" class="img-circle" alt="User Image" />
 						</div>
 						<div class="pull-left info">
-							<p><?php echo $first_name .' '. $last_name;?></p>
+							<p>Hi <?php echo $first_name;?> !</p>
 						</div>
 					</div>
 					<!-- search form -->
 				
-						<a class="btn btn-primary btn-block btn-flat" data-toggle="modal" data-target="#addPost"><i class="fa fa-plus-square"></i> Add New Post</a>
+						<!-- <a href="<?php// echo base_url();?>ckeditor" class="btn btn-primary btn-block btn-flat"><i class="fa fa-plus-square"></i> Add New Post</a> -->
+						<a href="javascript:void(0)" class="btn btn-primary btn-block btn-flat" data-toggle="modal" data-target="#addPost"><i class="fa fa-plus-square"></i> Add New Post</a>
 						<!-- <div class="input-group">
 							<input type="text" name="q" class="form-control" placeholder="Search..."/>
 							<span class="input-group-btn">
@@ -150,7 +151,7 @@
 							</a>
 							<ul class="treeview-menu">
 								<li><a href="<?php echo $base_url;?>unit"><i class="fa fa-circle-o"></i> Unit</a></li>
-								<li><a href="<?php echo $base_url;?>unit_category"><i class="fa fa-circle-o"></i> Item</a></li>
+								<!-- <li><a href="<?php echo $base_url;?>unit_category"><i class="fa fa-circle-o"></i> Item</a></li> -->
 							</ul>
 						</li>
 						<li id="user_account">
