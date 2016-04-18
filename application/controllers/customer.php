@@ -11,7 +11,7 @@ class Customer extends MY_Controller
         parent::__construct();
 
         if (!$this->session->userdata('logged_in')) {
-            return redirect('user');
+            return redirect('/');
         }
 
         $this->load->model('customer_model');

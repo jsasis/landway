@@ -11,7 +11,7 @@ class Manifest extends MY_Controller
         parent::__construct();
 
         if (!$this->session->userdata('logged_in')) {
-            return redirect('user');
+            return redirect('/');
         }
 
         $libraries = array(
@@ -64,6 +64,7 @@ class Manifest extends MY_Controller
     public function getDetails()
     {
         $manifest_number = $this->uri->segment(3);
+        
         if (!$manifest_number) {
             return redirect("error/error_404");
         }

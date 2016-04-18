@@ -6,7 +6,7 @@
 			parent::__construct();
 
 			if(!$this->session->userdata('logged_in')){
-				return redirect('user');
+				return redirect('/');
 			}
 
 			$libraries 	= array(

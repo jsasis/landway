@@ -12,7 +12,7 @@ class Truck extends CI_Controller
         parent::__construct();
 
         if (!$this->session->userdata('logged_in')) {
-            return redirect('user');
+            return redirect('/');
         } else {
             if ($this->session->userdata('logged_in')['role'] !== 'admin') {
                 return redirect('error/error_403');

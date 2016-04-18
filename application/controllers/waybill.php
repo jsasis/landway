@@ -10,7 +10,7 @@ class Waybill extends MY_Controller
         parent::__construct();
 
         if (!$this->session->userdata('logged_in')) {
-            return redirect('user');
+            return redirect('/');
         }
 
         $models = array(
