@@ -110,6 +110,6 @@
 
 	</section><! --/wrapper -->
 </section><!-- /MAIN CONTENT -->
-
+<?php include_once('includes/includes.php'); ?>
 </section><!-- /CONTAINER -->
 
