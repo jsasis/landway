@@ -36,7 +36,11 @@ class Waybill extends MY_Controller
     {
         $data = $this->paginate($this->waybill_model, base_url("waybill/show/$query_id"), $this->config->item('per_page_limit'), $query_id);
 
-        return $this->load->view('waybill/waybill', $data);
+        $this->load->view('includes/header');
+        $this->load->view('includes/sidebar');
+        $this->load->view('waybill/waybill', $data);
+        $this->load->view('includes/footer');
+        $this->load->view('waybill/js/custom');        
     }
 
     public function search()
@@ -146,7 +150,12 @@ class Waybill extends MY_Controller
         $this->load->model('truck_model');
         //$data['result'] = $this->unit_category_model->read();
         $data['trucks'] = $this->truck_model->getTrucks();
-        return $this->load->view('waybill/waybill_new', $data);
+
+        $this->load->view('includes/header');
+        $this->load->view('includes/sidebar');
+        $this->load->view('waybill/waybill_new', $data);
+        $this->load->view('includes/footer');
+        $this->load->view('waybill/js/custom'); 
     }
 
     public function update()
