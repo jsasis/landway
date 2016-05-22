@@ -1,46 +1,76 @@
-<html lang='en'>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<link rel='stylesheet' href='<?php echo base_url();?>css/bootstrap.min.css'>
-	<link rel='stylesheet' href='<?php echo base_url();?>css/styles.css'>
-	<script src='<?php echo base_url();?>js/jquery-1.11.1.min.js'></script>
-</head>
-<body class='login'>
-	<div class='container'>
-		<div class 'row'>
-			<div class='col-md-6 col-md-offset-3'>
-				<div class='loginWrapper'>
-					<div class='panel panel-primary login'>
-						<div class='panel-heading text-center'>
-							<h3 class='text-center'><strong><i class='fa fa-truck fa-2x'></i> LANDWAY CARGO SERVICES<strong></h3>
-						</div>
-						<div class='panel-body login'>
-							<div class='row'>
-								<div class='col-md-8 col-md-offset-2'>
-									<?php echo form_open( "auth/login", array( 'class'=>'form-horizontal'));?>
-									<?php if(validation_errors()): ?>
-									<div class='form-group'>
-										<div class='alert alert-danger'>
-											<p>Invalid login credentials</p>
-										</div>
-									</div>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="Dashboard">
+	<meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
 
-									<?php endif; ?>
-									<div class='form-group'>
-										<?php echo form_input(array( 'id'=>'username', 'name'=>'username', 'class'=>'form-control', 'placeholder' => 'Username', 'autocomplete'=>'off'));?>
-									</div>
-									<div class='form-group'>
-										<?php echo form_input(array( 'id'=>'password', 'name'=>'password', 'class'=>'form-control', 'placeholder' => 'Password','type'=>'password'));?>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class='panel-footer'>
-							<button type='submit' class='btn btn-success btn-block'><i class='fa fa-lock'></i> LOGIN</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+	<title>Landway</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="<?php echo base_url(); ?>assets/css/bootstrap.css" rel="stylesheet">
+	<!--external css-->
+	<link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+
+	<!-- Custom styles for this template -->
+	<link href="<?php echo base_url(); ?>assets/css/style.css" rel="stylesheet">
+	<link href="<?php echo base_url(); ?>assets/css/style-responsive.css" rel="stylesheet">
+
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+      <![endif]-->
+  </head>
+
+  <body>
+
+      <!-- **********************************************************************************************************************************************************
+      MAIN CONTENT
+      *********************************************************************************************************************************************************** -->
+
+      <div id="login-page">
+      	<div class="container">
+
+      		<?php echo form_open("auth/login", array('class' => 'form-login')); ?>
+      		<h2 class="form-login-heading">sign in now</h2>
+      		<div class="login-wrap">
+
+      			<?php if (validation_errors()): ?>
+  					<div class='alert alert-danger'>
+  						<p>Invalid login credentials. Please try again.</p>
+  					</div>
+
+      			<?php endif;?>
+
+      			<?php echo form_input(array('id' => 'username', 'name' => 'username', 'class' => 'form-control', 'placeholder' => 'Username', 'autocomplete' => 'off')); ?>
+
+      			<br>
+
+      			<?php echo form_input(array('id' => 'password', 'name' => 'password', 'class' => 'form-control', 'placeholder' => 'Password', 'type' => 'password')); ?>
+
+      			<br>
+
+      			<button class="btn btn-theme btn-block" type="submit"><i class="fa fa-lock"></i> SIGN IN</button>
+      		</div>
+      		<?php echo form_close(); ?>
+
+      </div>
+  </div>
+
+  <!-- js placed at the end of the document so the pages load faster -->
+  <script src="<?php echo base_url(); ?>assets/js/jquery.js"></script>
+  <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
+
+  <!--BACKSTRETCH-->
+  <!-- You can use an image of whatever size. This script will stretch to fit in any screen size.-->
+  <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery.backstretch.min.js"></script>
+  <script>
+  	$.backstretch("<?php echo base_url(); ?>assets/img/login-bg.jpg", {speed: 500});
+  </script>
+
+
 </body>
 </html>
