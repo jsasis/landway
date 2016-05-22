@@ -30,8 +30,8 @@ class Dashboard extends CI_Controller
 
         $data['posts'] = $this->post_model->findAll();
 
-        // return $this->load->view('dashboard', $data);
+        // return $this->load->view('admin_lte', $data);
 
-        return $this->load->view('admin_lte', $data);
+        return $this->load->view('dashboard', $data);
     }
 }
