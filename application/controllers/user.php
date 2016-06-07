@@ -21,8 +21,9 @@ class User extends MY_Controller
     public function show($query_id = 0)
     {
         $data = $this->paginate($this->user_model, base_url("user/show/$query_id"), $this->config->item('per_page_limit'), $query_id);
-
-        return $this->load->view('user/user', $data);
+        $data['page'] = 'Users';
+        $data['content'] = $this->load->view('user/user', $data, true);
+        $this->load->view('templates/table', $data);
     }
 
     public function search()
